@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Logo from "../components/Logo";
 
 // Temporary user credentials
 export const tempCredentials = {
@@ -115,20 +116,10 @@ const Login = () => {
     <div className="min-h-screen bg-gray-light flex items-center justify-center p-4">
       <div className="bg-white rounded-lg shadow-md w-full max-w-md overflow-hidden">
         <div className="bg-primary p-6 flex flex-col items-center">
-          {/* Abuja Logo - Simplified logo placeholder */}
-          <div className="w-16 h-16 bg-primary relative rounded-sm overflow-hidden border-2 border-white mb-4">
-            <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-accent-gold"></div>
-            <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-            <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary"></div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                <div className="w-4 h-4 bg-primary rounded-full"></div>
-              </div>
-            </div>
-          </div>
+          {/* Abuja Logo */}
+          <Logo size="large" className="mb-4" />
           <h1 className="text-white text-xl font-bold">
-            FCT POS Taxation System
+            FCT Agency POS Taxation
           </h1>
           <p className="text-white text-sm opacity-90">
             Federal Capital Territory, Abuja

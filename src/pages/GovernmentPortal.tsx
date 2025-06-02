@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import LogoutModal from "../components/LogoutModal";
+import GovernmentDashboard from "../components/GovernmentDashboard";
+import GovernmentRevenue from "../components/GovernmentRevenue";
+import GovernmentSettings from "../components/GovernmentSettings";
+import Logo from "../components/Logo";
 
 const GovernmentPortal = () => {
   const [currentView, setCurrentView] = useState<string>("dashboard");
@@ -52,20 +56,7 @@ const GovernmentPortal = () => {
         >
           <div className="p-4 border-b border-primary-light">
             <div className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-accent-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                />
-              </svg>
+              <Logo size="small" />
               <h1 className="text-xl font-bold">Government Portal</h1>
             </div>
           </div>
@@ -100,32 +91,6 @@ const GovernmentPortal = () => {
               </li>
               <li>
                 <button
-                  onClick={() => handleMenuClick("banks")}
-                  className={`w-full flex items-center px-4 py-3 ${
-                    currentView === "banks"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-                    />
-                  </svg>
-                  Bank Management
-                </button>
-              </li>
-              <li>
-                <button
                   onClick={() => handleMenuClick("revenue")}
                   className={`w-full flex items-center px-4 py-3 ${
                     currentView === "revenue"
@@ -148,32 +113,6 @@ const GovernmentPortal = () => {
                     />
                   </svg>
                   Revenue Analytics
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => handleMenuClick("reports")}
-                  className={`w-full flex items-center px-4 py-3 ${
-                    currentView === "reports"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  Reports
                 </button>
               </li>
               <li>
@@ -274,20 +213,9 @@ const GovernmentPortal = () => {
 
           {/* Content */}
           <main className="overflow-x-hidden p-4 md:p-6">
-            {currentView === "dashboard" && (
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-bold text-primary mb-4">
-                  Government Dashboard
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  Welcome to the FCT POS Taxation System Government Portal.
-                </p>
-                <div className="text-sm text-gray-500">
-                  <p>This is a placeholder for the Government Dashboard.</p>
-                  <p>Government portal features will be implemented here.</p>
-                </div>
-              </div>
-            )}
+            {currentView === "dashboard" && <GovernmentDashboard />}
+            {currentView === "revenue" && <GovernmentRevenue />}
+            {currentView === "settings" && <GovernmentSettings />}
           </main>
         </div>
       </div>

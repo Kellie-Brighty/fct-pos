@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import BankOnboardingForm from "../components/BankOnboardingForm";
 import { BankOnboardingData } from "../types";
+import Logo from "../components/Logo";
 
 const Registration = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -22,20 +23,10 @@ const Registration = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 bg-primary relative rounded-sm overflow-hidden border-2 border-primary">
-              <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-accent-gold"></div>
-              <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-              <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary"></div>
-              <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                  <div className="w-4 h-4 bg-primary rounded-full"></div>
-                </div>
-              </div>
-            </div>
+            <Logo size="large" />
           </div>
           <h1 className="text-3xl font-bold text-primary font-heading">
-            FCT POS Taxation System
+            FCT Agency POS Taxation
           </h1>
           <p className="mt-2 text-xl text-gray-600">Bank Registration Portal</p>
         </div>
@@ -66,7 +57,7 @@ const Registration = () => {
               </h2>
               <p className="text-gray-600">
                 Thank you for registering {submittedData?.bankName} with the FCT
-                POS Taxation System.
+                Agency POS Taxation.
               </p>
             </div>
 

@@ -5,6 +5,7 @@ import BankTransactionReports from "../components/BankTransactionReports";
 import BankPaymentHistory from "../components/BankPaymentHistory";
 import BankSettings from "../components/BankSettings";
 import LogoutModal from "../components/LogoutModal";
+import Logo from "../components/Logo";
 
 const BankPortal = () => {
   const [currentView, setCurrentView] = useState<
@@ -54,9 +55,11 @@ const BankPortal = () => {
 
   const handleDeclarationSubmit = (data: any) => {
     console.log("Declaration submitted:", data);
-    // In a real application, you would send this data to your backend
-    alert("Declaration submitted successfully!");
-    setCurrentView("dashboard");
+
+    // For the second call (after invoice is closed), navigate to dashboard
+    if (data.invoiceProcessed) {
+      setCurrentView("dashboard");
+    }
   };
 
   return (
@@ -71,20 +74,7 @@ const BankPortal = () => {
         >
           <div className="p-4 border-b border-primary-light">
             <div className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-accent-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
+              <Logo size="small" />
               <h1 className="text-xl font-bold">Bank Portal</h1>
             </div>
           </div>
@@ -292,25 +282,16 @@ const BankPortal = () => {
           </header>
 
           {/* Content */}
-          <main className="overflow-x-hidden">
+          <main className="overflow-x-hidden p-4 md:p-6">
             {currentView === "dashboard" && <BankDashboard />}
-
             {currentView === "declaration" && (
-              <div className="p-4 md:p-6">
-                <h1 className="text-2xl font-bold text-primary mb-6">
-                  New Tax Declaration
-                </h1>
-                <BankDeclarationForm
-                  onSubmit={handleDeclarationSubmit}
-                  systemCalculatedTax={systemCalculatedTax}
-                />
-              </div>
+              <BankDeclarationForm
+                onSubmit={handleDeclarationSubmit}
+                systemCalculatedTax={systemCalculatedTax}
+              />
             )}
-
             {currentView === "reports" && <BankTransactionReports />}
-
             {currentView === "payments" && <BankPaymentHistory />}
-
             {currentView === "settings" && <BankSettings />}
           </main>
         </div>

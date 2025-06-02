@@ -5,6 +5,7 @@ import TaxAssessment from "../components/TaxAssessment";
 import ConsultantReports from "../components/ConsultantReports";
 import ConsultantSettings from "../components/ConsultantSettings";
 import LogoutModal from "../components/LogoutModal";
+import Logo from "../components/Logo";
 
 const ConsultantPortal = () => {
   const [currentView, setCurrentView] = useState<
@@ -61,20 +62,7 @@ const ConsultantPortal = () => {
         >
           <div className="p-4 border-b border-primary-light">
             <div className="flex items-center space-x-2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-accent-gold"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
+              <Logo size="small" />
               <h1 className="text-xl font-bold">Consultant Portal</h1>
             </div>
           </div>

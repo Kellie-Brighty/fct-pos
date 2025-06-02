@@ -13,6 +13,7 @@ import BankPortal from "./pages/BankPortal";
 import ConsultantPortal from "./pages/ConsultantPortal";
 import GovernmentPortal from "./pages/GovernmentPortal";
 import Footer from "./Footer";
+import Logo from "./components/Logo";
 
 // Components
 const Navbar = () => {
@@ -26,19 +27,9 @@ const Navbar = () => {
     <nav className="bg-primary text-white py-4 shadow-md">
       <div className="container mx-auto flex justify-between items-center px-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-primary relative rounded-sm overflow-hidden border-2 border-white">
-            <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-accent-gold"></div>
-            <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-            <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-secondary"></div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-accent-blue"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                <div className="w-3 h-3 bg-primary rounded-full"></div>
-              </div>
-            </div>
-          </div>
+          <Logo size="medium" />
           <h1 className="text-xl font-bold text-white font-heading">
-            FCT POS Taxation System
+            FCT Agency POS Taxation
           </h1>
         </div>
         <div className="hidden md:flex space-x-6">
@@ -209,6 +200,318 @@ const FeatureCard = ({
   );
 };
 
+const AgentTaxStatusCheck = () => {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchType, setSearchType] = useState<"phone" | "taxId">("phone");
+  const [isChecking, setIsChecking] = useState(false);
+  const [searchResult, setSearchResult] = useState<null | {
+    status: "paid" | "unpaid" | "not_found";
+    agentName?: string;
+    bankName?: string;
+    lastPaymentDate?: string;
+    dueAmount?: number;
+  }>(null);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsChecking(true);
+
+    // Simulate API call with a timeout
+    setTimeout(() => {
+      // Demo data - in a real app, this would come from the backend
+      if (searchInput === "08012345678" || searchInput === "FCTPOS123") {
+        setSearchResult({
+          status: "paid",
+          agentName: "John Doe",
+          bankName: "First Bank Nigeria PLC",
+          lastPaymentDate: "2023-06-15",
+        });
+      } else if (searchInput === "08087654321" || searchInput === "FCTPOS456") {
+        setSearchResult({
+          status: "unpaid",
+          agentName: "Jane Smith",
+          bankName: "Zenith Bank",
+          dueAmount: 25000,
+        });
+      } else {
+        setSearchResult({
+          status: "not_found",
+        });
+      }
+      setIsChecking(false);
+    }, 1500);
+  };
+
+  const handleClear = () => {
+    setSearchInput("");
+    setSearchResult(null);
+  };
+
+  return (
+    <section className="py-12 bg-white border-t border-gray-200">
+      <div className="container mx-auto px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-primary font-heading mb-4">
+              POS Agent Tax Status Check
+            </h2>
+            <p className="text-gray-600">
+              Check your current taxation status by entering your phone number
+              or tax ID below.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg border border-gray-200 p-6 shadow-sm">
+            <form onSubmit={handleSearch}>
+              <div className="flex flex-col md:flex-row gap-4 mb-4">
+                <div className="flex-1">
+                  <label
+                    htmlFor="searchType"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    Search By
+                  </label>
+                  <select
+                    id="searchType"
+                    value={searchType}
+                    onChange={(e) =>
+                      setSearchType(e.target.value as "phone" | "taxId")
+                    }
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
+                  >
+                    <option value="phone">Phone Number</option>
+                    <option value="taxId">Tax ID</option>
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <label
+                    htmlFor="searchInput"
+                    className="block text-sm font-medium text-gray-700 mb-1"
+                  >
+                    {searchType === "phone" ? "Phone Number" : "Tax ID"}
+                  </label>
+                  <input
+                    type={searchType === "phone" ? "tel" : "text"}
+                    id="searchInput"
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    placeholder={
+                      searchType === "phone"
+                        ? "Enter your phone number"
+                        : "Enter your tax ID"
+                    }
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center gap-3">
+                <button
+                  type="submit"
+                  disabled={isChecking || !searchInput}
+                  className={`px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition ${
+                    isChecking || !searchInput
+                      ? "opacity-70 cursor-not-allowed"
+                      : ""
+                  }`}
+                >
+                  {isChecking ? (
+                    <span className="flex items-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Checking...
+                    </span>
+                  ) : (
+                    "Check Status"
+                  )}
+                </button>
+                {searchResult && (
+                  <button
+                    type="button"
+                    onClick={handleClear}
+                    className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-100 transition"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+            </form>
+
+            {/* Results Display */}
+            {searchResult && (
+              <div className="mt-6 border-t border-gray-200 pt-4">
+                {searchResult.status === "not_found" ? (
+                  <div className="text-center p-4">
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mb-3">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-1">
+                      No Records Found
+                    </h3>
+                    <p className="text-gray-600">
+                      We couldn't find any POS agent with the provided
+                      information.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-md p-4">
+                    <div className="flex items-center mb-4">
+                      <div
+                        className={`inline-flex items-center justify-center w-12 h-12 rounded-full mr-4 ${
+                          searchResult.status === "paid"
+                            ? "bg-green-100 text-green-500"
+                            : "bg-orange-100 text-orange-500"
+                        }`}
+                      >
+                        {searchResult.status === "paid" ? (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                        ) : (
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                            />
+                          </svg>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-medium text-gray-900">
+                          {searchResult.agentName}
+                        </h3>
+                        <p className="text-gray-600">
+                          {searchResult.status === "paid"
+                            ? "Your tax payments are up to date"
+                            : "You have outstanding tax payments"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-500 mb-1">Bank</p>
+                        <p className="font-medium">{searchResult.bankName}</p>
+                      </div>
+                      {searchResult.status === "paid" ? (
+                        <div>
+                          <p className="text-gray-500 mb-1">
+                            Last Payment Date
+                          </p>
+                          <p className="font-medium">
+                            {searchResult.lastPaymentDate}
+                          </p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-gray-500 mb-1">Due Amount</p>
+                          <p className="font-medium text-red-600">
+                            ₦{searchResult.dueAmount?.toLocaleString()}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {searchResult.status === "unpaid" && (
+                      <div className="mt-4 pt-4 border-t border-gray-200">
+                        <p className="text-gray-600 mb-2">
+                          Please contact your bank or visit the FCT Revenue
+                          Office to make your payment.
+                        </p>
+                        <a
+                          href="#contact"
+                          className="text-primary hover:text-primary-dark font-medium inline-flex items-center"
+                        >
+                          Contact Us
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4 ml-1"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="text-center text-gray-500 text-sm mt-4">
+            <p>
+              For demo purposes, try these values:
+              <br />
+              Phone: 08012345678 (paid) or 08087654321 (unpaid)
+              <br />
+              Tax ID: FCTPOS123 (paid) or FCTPOS456 (unpaid)
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Features = () => {
   return (
     <section id="features" className="py-16 bg-gray-light">
@@ -309,7 +612,7 @@ const ContactSection = () => {
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold mb-2 font-heading">Contact Us</h2>
             <p className="text-gray-600">
-              Have questions about the FCT POS Taxation System? Reach out to our
+              Have questions about the FCT Agency POS Taxation? Reach out to our
               team.
             </p>
           </div>
@@ -466,6 +769,7 @@ const LandingPage = () => {
       <Navbar />
       <Hero />
       <Features />
+      <AgentTaxStatusCheck />
       <ContactSection />
       <Footer />
     </div>
