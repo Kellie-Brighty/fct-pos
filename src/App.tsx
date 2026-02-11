@@ -124,7 +124,7 @@ const Navbar = () => {
 
 const Hero = () => {
   return (
-    <div className="relative pt-44 pb-32 overflow-hidden bg-secondary">
+    <div id="home" className="relative pt-44 pb-32 overflow-hidden bg-secondary">
       {/* Dynamic Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full animate-pulse"></div>

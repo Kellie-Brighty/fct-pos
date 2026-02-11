@@ -21,7 +21,7 @@ const Footer = () => {
           <div>
              <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">Navigation</h3>
              <ul className="space-y-4">
-                <li><a href="#" className="text-xs font-bold text-white/80 hover:text-white uppercase tracking-widest transition-all">Home</a></li>
+                <li><a href="#home" className="text-xs font-bold text-white/80 hover:text-white uppercase tracking-widest transition-all">Home</a></li>
                 <li><a href="#features" className="text-xs font-bold text-white/80 hover:text-white uppercase tracking-widest transition-all">Features</a></li>
                 <li><a href="#contact" className="text-xs font-bold text-white/80 hover:text-white uppercase tracking-widest transition-all">Contact</a></li>
              </ul>
