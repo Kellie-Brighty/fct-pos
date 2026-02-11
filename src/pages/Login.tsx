@@ -231,6 +231,44 @@ const Login = () => {
             </button>
           </form>
 
+          {/* Quick Access Demo Accounts */}
+          <div className="mt-10 pt-6 border-t border-white/10">
+            <h3 className="text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4 text-center">
+              Quick Access Demo Accounts
+            </h3>
+            <div className="space-y-3">
+              {[
+                { label: "Government Admin", email: "admin@fct.gov.ng", pass: "admin123", icon: "🏛️" },
+                { label: "Bank Inspector", email: "firstbank@example.com", pass: "bank123", icon: "🏦" },
+                { label: "Fiscal Consultant", email: "consultant@example.com", pass: "consultant123", icon: "💼" }
+              ].map((demo) => (
+                <button
+                  key={demo.email}
+                  onClick={() => {
+                    setEmail(demo.email);
+                    setPassword(demo.pass);
+                  }}
+                  className="w-full flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 group/demo"
+                >
+                  <div className="flex items-center">
+                    <span className="text-xl mr-3">{demo.icon}</span>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black text-white/50 uppercase tracking-wider group-hover/demo:text-primary-light transition-colors">
+                        {demo.label}
+                      </p>
+                      <p className="text-xs font-bold text-white/80">{demo.email}</p>
+                    </div>
+                  </div>
+                  <div className="opacity-0 group-hover/demo:opacity-100 transition-opacity">
+                    <svg className="w-4 h-4 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Institutional Badge / Demo Info */}
           <div className="mt-10 pt-6 border-t border-white/10">
             <div className="flex items-center justify-center opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
