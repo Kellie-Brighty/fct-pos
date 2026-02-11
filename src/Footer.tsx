@@ -46,7 +46,7 @@ const Footer = () => {
 
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
            <p className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">
-             &copy; {new Date().getFullYear()} Abuja POS Tax System. All rights reserved.
+             &copy; {new Date().getFullYear()} FCT POS Tax System. All rights reserved.
            </p>
            <div className="flex space-x-8 text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">
               <a href="#" className="hover:text-white transition-all">Privacy Policy</a>

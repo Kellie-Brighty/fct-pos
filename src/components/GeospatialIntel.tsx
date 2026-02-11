@@ -8,14 +8,14 @@ const containerStyle = {
 };
 
 const center = {
-  lat: 9.0765, // Abuja coordinates
+  lat: 9.0765, // FCT coordinates
   lng: 7.3986
 };
 
 // Mock markers for regions
 const regions = [
   { id: 1, name: "Lagos Metro", position: { lat: 6.5244, lng: 3.3792 }, status: "High Activity" },
-  { id: 2, name: "Abuja Central", position: { lat: 9.0765, lng: 7.3986 }, status: "Medium Activity" },
+  { id: 2, name: "FCT Central", position: { lat: 9.0765, lng: 7.3986 }, status: "Medium Activity" },
   { id: 3, name: "Port Harcourt", position: { lat: 4.8156, lng: 7.0498 }, status: "Low Activity" },
   { id: 4, name: "Kano Commercial", position: { lat: 12.0022, lng: 8.5920 }, status: "High Activity" },
 ];
@@ -113,7 +113,7 @@ const GeospatialIntel = () => {
               className="w-48 h-[44px] antd-bold-select"
               value={jurisdiction}
               onChange={setJurisdiction}
-              options={[{ value: "All States", label: "All States" }, { value: "Lagos", label: "Lagos" }, { value: "Abuja", label: "Abuja" }]}
+              options={[{ value: "All States", label: "All States" }, { value: "Lagos", label: "Lagos" }, { value: "FCT", label: "FCT" }]}
             />
             <Select
               className="w-48 h-[44px] antd-bold-select"
@@ -187,7 +187,7 @@ const GeospatialIntel = () => {
               </div>
             </div>
 
-            {/* Abuja Hotspot */}
+            {/* FCT Hotspot */}
             <div className="absolute top-[40%] left-[55%] group/pin">
               <div className="w-12 h-12 bg-accent-gold/20 rounded-full animate-ping absolute -inset-4"></div>
               <div className="w-4 h-4 bg-accent-gold rounded-full border-2 border-white shadow-[0_0_20px_#F0B323]"></div>

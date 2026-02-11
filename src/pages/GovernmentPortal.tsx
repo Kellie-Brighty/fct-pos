@@ -202,7 +202,7 @@ const GovernmentPortal = () => {
 
               <div className="flex items-center space-x-6">
                 <div className="hidden md:flex flex-col items-end">
-                  <span className="text-sm font-bold text-white tracking-tight">Abuja FCT IRS</span>
+                  <span className="text-sm font-bold text-white tracking-tight">FCT IRS</span>
                   <span className="text-[10px] text-white/80 font-semibold uppercase tracking-widest leading-none mt-0.5">District Admin</span>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-prime-gradient p-[1px] shadow-lg shadow-primary/20">

@@ -142,7 +142,7 @@ const Hero = () => {
             </h1>
             
             <p className="text-lg md:text-xl mb-12 text-white/50 font-medium leading-relaxed max-w-lg">
-              A simple and transparent way to collect taxes from POS transactions in Abuja.
+              Institutional framework for transparent fiscal monitoring and automated revenue documentation across the FCT.
             </p>
             
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-8">
@@ -392,12 +392,12 @@ const Features = () => {
     <section id="features" className="py-32 relative bg-secondary">
       <div className="container mx-auto px-6">
         <div className="text-center mb-24 animate-in fade-in duration-1000">
-          <p className="text-[10px] font-black text-primary-high uppercase tracking-[0.4em] mb-4">What We Do</p>
+          <p className="text-[10px] font-black text-primary-high uppercase tracking-[0.4em] mb-4">Institutional Mandate</p>
           <h2 className="text-4xl md:text-5xl font-black text-white font-heading tracking-tighter text-glow">
-            System <span className="text-primary-light">Features</span>
+            Regulatory <span className="text-primary-light">Framework</span>
           </h2>
           <p className="text-lg text-white/80 max-w-2xl mx-auto mt-6 font-medium">
-            Helping Abuja manage POS taxes with simple and clear tools.
+            Enforcing fiscal compliance and automated oversight for POS transactions within the FCT jurisdiction.
           </p>
         </div>
 
@@ -425,8 +425,8 @@ const Features = () => {
                 />
               </svg>
             }
-            title="Tracking"
-            description="Real-time monitoring of POS transactions to ensure correct tax collection."
+            title="Fiscal Monitoring"
+            description="High-fidelity tracking of POS transaction flows to ensure institutional revenue compliance."
           />
 
           <FeatureCard
@@ -446,8 +446,8 @@ const Features = () => {
                 />
               </svg>
             }
-            title="Calculations"
-            description="Automatically calculate taxes based on transaction volume with zero errors."
+            title="Regulatory Assessment"
+            description="Automated audit protocols that eliminate documentation gaps and ensure precise fiscal reporting."
           />
 
           <FeatureCard
@@ -467,8 +467,8 @@ const Features = () => {
                 />
               </svg>
             }
-            title="Security"
-            description="High-level security for all data and bank connections, keeping your information safe."
+            title="Institutional Integrity"
+            description="Encrypted banking protocols and sovereign data protection for all financial registries."
           />
         </div>
       </div>
@@ -491,7 +491,7 @@ const ContactSection = () => {
                   Help Center
                 </h2>
                 <p className="text-white/80 font-medium leading-relaxed mb-12">
-                  Contact the FCT team for any help or questions about the system.
+                  Direct engagement channel for FCT regulatory inquiries and system directives.
                 </p>
                 
                 <div className="space-y-8">

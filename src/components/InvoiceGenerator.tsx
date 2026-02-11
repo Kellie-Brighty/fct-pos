@@ -157,7 +157,7 @@ const InvoiceGenerator = ({
             <h1 className="text-3xl font-black text-white tracking-tighter uppercase">TAX <span className="text-primary-light">MANIFEST</span></h1>
           </div>
           <div className="space-y-1">
-            <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">Regulatory Jurisdiction: FCT, Abuja</p>
+            <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">Regulatory Jurisdiction: FCT</p>
             <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">Institutional Alignment Hub</p>
           </div>
         </div>

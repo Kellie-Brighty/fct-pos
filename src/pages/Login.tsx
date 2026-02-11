@@ -122,7 +122,7 @@ const Login = () => {
 
       <div className="glass-card w-full max-w-md overflow-hidden relative z-10 border-white/20">
         <div className="bg-prime-gradient p-8 flex flex-col items-center border-b border-white/10">
-          {/* Abuja Logo */}
+          {/* FCT Logo */}
           <div className="bg-white/10 p-4 rounded-full backdrop-blur-md mb-4 border border-white/20 shadow-xl">
             <Logo size="large" />
           </div>

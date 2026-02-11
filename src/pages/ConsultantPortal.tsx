@@ -258,7 +258,7 @@ const ConsultantPortal = () => {
                 <div className="hidden md:block text-right">
                   <p className="text-[10px] font-black text-white/80 uppercase tracking-widest leading-none mb-1">Fiscal Consultant Identity</p>
                   <p className="text-xs font-bold text-white uppercase tracking-wide">
-                    Jane Doe - Abuja FCT
+                    Jane Doe - FCT
                   </p>
                 </div>
                 <div className="w-10 h-10 rounded-xl bg-prime-gradient p-px">

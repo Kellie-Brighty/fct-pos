@@ -34,7 +34,7 @@ const BankDashboard = () => {
       amount: 50000,
       tax: 100,
       agent: "Agent 1",
-      location: "Wuse, Abuja",
+      location: "Wuse, FCT",
     },
     {
       id: "TX002",
@@ -42,7 +42,7 @@ const BankDashboard = () => {
       amount: 25000,
       tax: 50,
       agent: "Agent 2",
-      location: "Garki, Abuja",
+      location: "Garki, FCT",
     },
     {
       id: "TX003",
@@ -50,7 +50,7 @@ const BankDashboard = () => {
       amount: 100000,
       tax: 200,
       agent: "Agent 3",
-      location: "Maitama, Abuja",
+      location: "Maitama, FCT",
     },
     {
       id: "TX004",
@@ -58,7 +58,7 @@ const BankDashboard = () => {
       amount: 75000,
       tax: 150,
       agent: "Agent 1",
-      location: "Wuse, Abuja",
+      location: "Wuse, FCT",
     },
     {
       id: "TX005",
@@ -66,7 +66,7 @@ const BankDashboard = () => {
       amount: 30000,
       tax: 60,
       agent: "Agent 4",
-      location: "Asokoro, Abuja",
+      location: "Asokoro, FCT",
     },
     {
       id: "TX006",
@@ -74,7 +74,7 @@ const BankDashboard = () => {
       amount: 45000,
       tax: 90,
       agent: "Agent 2",
-      location: "Garki, Abuja",
+      location: "Garki, FCT",
     },
     {
       id: "TX007",
@@ -82,7 +82,7 @@ const BankDashboard = () => {
       amount: 60000,
       tax: 120,
       agent: "Agent 5",
-      location: "Central Area, Abuja",
+      location: "Central Area, FCT",
     },
     {
       id: "TX008",
@@ -90,7 +90,7 @@ const BankDashboard = () => {
       amount: 80000,
       tax: 160,
       agent: "Agent 3",
-      location: "Maitama, Abuja",
+      location: "Maitama, FCT",
     },
   ];
 

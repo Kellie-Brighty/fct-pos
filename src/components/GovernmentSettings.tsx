@@ -12,7 +12,7 @@ const GovernmentSettings = () => {
     phone: "+234 803 456 7890",
     position: "Senior Administrator",
     department: "Revenue Service",
-    office: "FCT Internal Revenue Service, Abuja",
+    office: "FCT Internal Revenue Service, FCT",
     bio: "Government administrator overseeing POS taxation system for FCT.",
   });
 
@@ -477,7 +477,7 @@ const GovernmentSettings = () => {
                   {[
                     {
                       device: "Chrome / Windows 11",
-                      loc: "Abuja HQ",
+                      loc: "FCT HQ",
                       status: "STATION 01",
                       current: true,
                     },
