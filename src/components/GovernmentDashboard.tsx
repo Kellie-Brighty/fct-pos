@@ -9,302 +9,220 @@ const GovernmentDashboard = () => {
 
   // Mock data for dashboard metrics
   const dashboardMetrics = {
-    totalTaxCollected: "₦126,584,305.00",
+    totalTaxCollected: "₦126.6M",
     monthlyTarget: "₦150,000,000.00",
     complianceRate: "87%",
     activeBanks: 23,
-    totalTransactions: "6,458,921",
+    totalTransactions: "6.46M",
     avgTaxPerTransaction: "₦19.60",
     yearToDateGrowth: "+16.3%",
     pendingInvoices: 4,
     paidInvoices: 19,
     // New transaction volume data
-    transactionVolume: "₦63,291,850,500.00",
+    transactionVolume: "₦63.3B",
     volumeGrowth: "+12.7%",
     peakHour: "12:00 - 13:00",
     avgTransactionSize: "₦9,800.00",
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-primary">
-          Government Dashboard
-        </h1>
-        <div className="mt-4 md:mt-0 bg-white rounded-lg shadow-sm inline-flex p-1">
-          <button
-            className={`px-4 py-2 text-sm rounded-md ${
-              period === "daily"
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-            onClick={() => setPeriod("daily")}
-          >
-            Daily
-          </button>
-          <button
-            className={`px-4 py-2 text-sm rounded-md ${
-              period === "weekly"
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-            onClick={() => setPeriod("weekly")}
-          >
-            Weekly
-          </button>
-          <button
-            className={`px-4 py-2 text-sm rounded-md ${
-              period === "monthly"
-                ? "bg-primary text-white"
-                : "text-gray-600 hover:bg-gray-100"
-            }`}
-            onClick={() => setPeriod("monthly")}
-          >
-            Monthly
-          </button>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <p className="text-[10px] font-black text-primary-high uppercase tracking-[0.4em] mb-3">
+            System Overview
+          </p>
+          <h2 className="text-4xl font-black text-white font-heading tracking-tighter text-glow">
+            Regulatory Ops <span className="text-primary-light">Command</span>
+          </h2>
+        </div>
+        <div className="mt-8 md:mt-0 glass-card bg-white/2 border-white/5 p-1.5 flex shadow-2xl rounded-2xl">
+          {["daily", "weekly", "monthly"].map((p) => (
+            <button
+              key={p}
+              className={`px-8 py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-500 ${
+                period === p
+                  ? "bg-primary text-white shadow-2xl shadow-primary/40 scale-105"
+                  : "text-white/80 hover:text-white/80"
+              }`}
+              onClick={() => setPeriod(p as any)}
+            >
+              {p}
+            </button>
+          ))}
         </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <div className="flex items-center justify-between mb-3 md:mb-4">
-            <h3 className="text-base md:text-lg font-medium text-gray-700 truncate pr-2">
-              Total Tax Collected
+      {/* Key Metrics Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Total Collected */}
+        <div className="glass-card p-8 border-white/5 bg-white/2 hover:border-primary/20 transition-all duration-500 group relative overflow-hidden rounded-[2rem]">
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-primary/5 blur-3xl group-hover:bg-primary/10 transition-all duration-700"></div>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
+              Total Revenue
             </h3>
-            <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap">
+            <span className="text-[10px] font-black text-primary-light bg-primary/10 px-3 py-1 rounded-full tracking-widest border border-primary/20">
               {dashboardMetrics.yearToDateGrowth}
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-primary mb-2 truncate">
+          <div className="text-3xl font-black text-white mb-8 tracking-tighter tabular-nums">
             {dashboardMetrics.totalTaxCollected}
           </div>
-          <div className="text-sm text-gray-500">
-            <span className="block mb-1 truncate">
-              Target: {dashboardMetrics.monthlyTarget}
-            </span>
-            <div className="w-full bg-gray-200 rounded-full h-2.5 mt-1 md:mt-2">
+          <div className="space-y-4">
+            <div className="flex justify-between text-[9px] font-black tracking-widest uppercase">
+              <span className="text-white/80">Target Progress</span>
+              <span className="text-white/80">{dashboardMetrics.complianceRate}</span>
+            </div>
+            <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
               <div
-                className="bg-primary h-2.5 rounded-full"
+                className="bg-primary h-full rounded-full shadow-[0_0_15px_rgba(0,109,53,0.5)] transition-all duration-1000"
                 style={{ width: dashboardMetrics.complianceRate }}
               ></div>
             </div>
           </div>
         </div>
 
-        {/* New Transaction Volume Card */}
-        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <div className="flex items-center justify-between mb-3 md:mb-4">
-            <h3 className="text-base md:text-lg font-medium text-gray-700 truncate pr-2">
+        {/* Transaction Volume */}
+        <div className="glass-card p-8 border-white/5 bg-white/2 hover:border-accent-gold/20 transition-all duration-500 group relative overflow-hidden rounded-[2rem]">
+          <div className="absolute -right-8 -top-8 w-32 h-32 bg-accent-gold/5 blur-3xl group-hover:bg-accent-gold/10 transition-all duration-700"></div>
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
               Transaction Volume
             </h3>
-            <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded whitespace-nowrap">
+            <span className="text-[10px] font-black text-accent-gold bg-accent-gold/10 px-3 py-1 rounded-full tracking-widest border border-accent-gold/20">
               {dashboardMetrics.volumeGrowth}
             </span>
           </div>
-          <div className="text-2xl md:text-3xl font-bold text-primary mb-2 truncate">
+          <div className="text-3xl font-black text-white mb-8 tracking-tighter tabular-nums">
             {dashboardMetrics.transactionVolume}
           </div>
-          <div className="text-sm text-gray-500 mb-2">
-            <span className="block truncate">
-              Total value of all POS transactions
-            </span>
-          </div>
-          <div className="space-y-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700 truncate pr-2">
-                Average Transaction Size
-              </span>
-              <span className="text-gray-900 font-medium whitespace-nowrap">
-                {dashboardMetrics.avgTransactionSize}
-              </span>
+          <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
+            <div>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Avg Transaction</p>
+              <p className="text-xs font-black text-white/80 tabular-nums">{dashboardMetrics.avgTransactionSize}</p>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700 truncate pr-2">
-                Peak Transaction Hour
-              </span>
-              <span className="text-gray-900 font-medium whitespace-nowrap">
-                {dashboardMetrics.peakHour}
-              </span>
+            <div>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Peak Time</p>
+              <p className="text-xs font-black text-white/80">{dashboardMetrics.peakHour}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-medium text-gray-700 mb-3 md:mb-4 truncate">
-            Bank Compliance
+        {/* Compliance */}
+        <div className="glass-card p-8 border-white/5 bg-white/2 rounded-[2rem] group hover:border-white/10 transition-all duration-500">
+          <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest leading-none mb-1">
+            Analytical Protocol
+          </p>
+          <h3 className="text-sm font-black text-white uppercase tracking-tighter">
+            Fiscal Summary
           </h3>
-          <div className="text-2xl md:text-3xl font-bold text-primary mb-2">
+          <div className="text-5xl font-black text-white mb-8 tracking-tighter tabular-nums text-glow-primary">
             {dashboardMetrics.complianceRate}
           </div>
-          <div className="space-y-1">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700 truncate pr-2">Active Banks</span>
-              <span className="text-gray-900 font-medium whitespace-nowrap">
-                {dashboardMetrics.activeBanks}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700 truncate pr-2">Invoices Paid</span>
-              <span className="text-gray-900 font-medium whitespace-nowrap">
-                {dashboardMetrics.paidInvoices}
-              </span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-700 truncate pr-2">
-                Invoices Pending
-              </span>
-              <span className="text-gray-900 font-medium whitespace-nowrap">
-                {dashboardMetrics.pendingInvoices}
-              </span>
-            </div>
+          <div className="space-y-4">
+            {[
+              { label: "Active Banks", val: dashboardMetrics.activeBanks, color: "text-primary" },
+              { label: "Paid", val: dashboardMetrics.paidInvoices, color: "text-primary-light" },
+              { label: "Pending", val: dashboardMetrics.pendingInvoices, color: "text-accent-gold" },
+            ].map((item) => (
+              <div key={item.label} className="flex justify-between items-center text-[9px] font-black tracking-widest uppercase">
+                <span className="text-white/80">{item.label}</span>
+                <span className={`${item.color} tabular-nums`}>
+                  {item.val}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-4 md:p-6">
-          <h3 className="text-base md:text-lg font-medium text-gray-700 mb-3 md:mb-4 truncate">
-            Transaction Overview
+        {/* Overview */}
+        <div className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 rounded-[2rem] transition-all duration-500 group relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">
+            Collection Activity
           </h3>
-          <div className="text-2xl md:text-3xl font-bold text-primary mb-2 truncate">
+          <div className="text-3xl font-black text-white mb-2 tracking-tighter tabular-nums group-hover:scale-105 transition-transform duration-500 origin-left">
             {dashboardMetrics.totalTransactions}
           </div>
-          <div className="text-sm text-gray-500 mb-3 md:mb-4">
-            <span className="block truncate">Total POS transactions</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-700 truncate pr-2">
-              Average Tax Per Transaction
-            </span>
-            <span className="text-gray-900 font-medium whitespace-nowrap">
-              {dashboardMetrics.avgTaxPerTransaction}
-            </span>
+          <p className="text-[9px] font-black text-white/80 mb-10 tracking-widest uppercase opacity-40">Total Verified Transactions</p>
+          <div className="pt-6 border-t border-white/5">
+            <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-2">Efficiency Index</p>
+            <div className="flex items-baseline">
+              <span className="text-xl font-black tabular-nums text-white/80">{dashboardMetrics.avgTaxPerTransaction}</span>
+              <span className="text-[9px] font-black ml-2 text-white/80 tracking-widest">/ BANK</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Charts */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-medium text-gray-700 mb-4">
-          Monthly Tax Collection Trend
-        </h3>
-        <MonthlyTaxChart />
-      </div>
-
-      {/* Recent Activity */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-medium text-gray-700">
-            Recent Tax Payments
-          </h3>
-          <button className="text-primary hover:text-primary-dark text-sm font-medium">
-            View All
-          </button>
+      {/* Main Intelligence Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+        {/* Trend Analysis */}
+        <div className="lg:col-span-2 glass-card p-10 border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem]">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 gap-6">
+            <div>
+              <h3 className="text-xl font-black text-white tracking-tighter mb-2">REVENUE TRENDS</h3>
+              <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.3em]">Monthly Tax Collection Analysis</p>
+            </div>
+            <div className="flex items-center space-x-8">
+              <div className="flex items-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary mr-3 shadow-[0_0_10px_rgba(0,109,53,1)]"></div>
+                <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Actual</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-accent-gold/40 mr-3 border border-accent-gold/60"></div>
+                <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Projected</span>
+              </div>
+            </div>
+          </div>
+          <div className="h-[350px] w-full bg-white/2 rounded-3xl border border-white/5 flex items-center justify-center relative overflow-hidden group/chart">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,109,53,0.05),transparent)] pointer-events-none"></div>
+            <MonthlyTaxChart />
+          </div>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Bank
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Amount
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Date
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    First Bank Nigeria
+
+        {/* Transmission Log (Recent Activity) */}
+        <div className="glass-card flex flex-col h-full border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] overflow-hidden">
+          <div className="p-8 border-b border-white/5 bg-white/2">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-black text-white uppercase tracking-widest opacity-80">Recent Transfers</h3>
+              <button className="text-[9px] font-black text-primary-light uppercase tracking-widest hover:text-white transition-all bg-primary/5 border border-primary/10 px-4 py-2 rounded-xl">
+                View All
+              </button>
+            </div>
+            <p className="text-[9px] text-white/80 font-black uppercase tracking-[0.2em]">Verified Bank Settlements</p>
+          </div>
+          
+          <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6 custom-scrollbar">
+            {[
+              { bank: "First Bank Nigeria", amt: "₦12,564,320.00", date: "MAY 15", status: "VERIFIED" },
+              { bank: "GTBank", amt: "₦9,845,150.00", date: "MAY 14", status: "VERIFIED" },
+              { bank: "Union Bank", amt: "₦7,125,680.00", date: "MAY 13", status: "VERIFIED" },
+              { bank: "Access Bank", amt: "₦8,437,925.00", date: "MAY 12", status: "PENDING" },
+              { bank: "Zenith Bank", amt: "₦15,230,000.00", date: "MAY 11", status: "VERIFIED" },
+            ].map((tx, idx) => (
+              <div key={idx} className="flex items-center justify-between group cursor-pointer hover:bg-white/5 p-4 -mx-4 rounded-2xl transition-all border border-transparent hover:border-white/5">
+                <div className="flex items-center space-x-4">
+                  <div className={`w-1.5 h-1.5 rounded-full ${tx.status === "VERIFIED" ? "bg-primary shadow-[0_0_10px_rgba(0,109,53,1)]" : "bg-accent-gold shadow-[0_0_10px_rgba(240,179,35,1)]"} transition-all group-hover:scale-125`}></div>
+                  <div>
+                    <p className="text-xs font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest">{tx.bank}</p>
+                    <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mt-1 group-hover:text-white/80">{tx.date}</p>
                   </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">₦12,564,320.00</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">May 15, 2023</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Paid
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    GTBank
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">₦9,845,150.00</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">May 14, 2023</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Paid
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    Union Bank
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">₦7,125,680.00</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">May 13, 2023</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    Paid
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">
-                    Access Bank
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">₦8,437,925.00</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">May 12, 2023</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                    Pending
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-black text-white tabular-nums tracking-tighter group-hover:text-primary-light transition-colors">{tx.amt}</p>
+                  <p className={`text-[8px] font-black tracking-widest uppercase mt-1 ${tx.status === "VERIFIED" ? "text-primary opacity-60" : "text-accent-gold opacity-60"}`}>
+                    {tx.status}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="p-6 bg-white/5 border-t border-white/5 text-center">
+            <span className="text-[8px] font-black text-white/10 uppercase tracking-[0.5em]">System Status: <span className="text-primary-light">All Banks Connected</span></span>
+          </div>
         </div>
       </div>
     </div>

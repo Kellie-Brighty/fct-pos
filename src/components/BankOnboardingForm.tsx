@@ -121,56 +121,55 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
   };
 
   return (
-    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-      <h2 className="text-xl md:text-2xl font-bold text-primary mb-2 font-heading">
+    <div className="bg-transparent text-white">
+      <h2 className="text-2xl font-black text-white mb-2 font-heading tracking-tighter text-glow">
         Bank Onboarding
       </h2>
-      <p className="text-gray-600 mb-6">
-        Please provide your bank's information to register for the FCT POS
-        Taxation System.
+      <p className="text-white/80 text-xs font-bold uppercase tracking-[0.2em] mb-10">
+        Register your institution for the POS Taxation System.
       </p>
 
       {/* Progress Indicator */}
-      <div className="mb-8 overflow-x-hidden">
-        <div className="flex items-center justify-between">
+      <div className="mb-12 relative">
+        <div className="flex items-center justify-between relative z-10">
           {Array.from({ length: totalSteps }).map((_, index) => (
-            <div key={index} className="flex items-center">
+            <div key={index} className="flex items-center flex-1 last:flex-initial">
               <div
-                className={`w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm transition-all duration-500 ${
                   step > index + 1
-                    ? "bg-primary text-white"
+                    ? "bg-primary text-white shadow-[0_0_20px_rgba(0,109,53,0.4)]"
                     : step === index + 1
-                    ? "bg-primary-light text-white"
-                    : "bg-gray-200 text-gray-600"
+                    ? "bg-prime-gradient text-white shadow-[0_0_25px_rgba(0,109,53,0.5)] scale-110"
+                    : "bg-white/5 border border-white/10 text-white/80"
                 }`}
               >
                 {index + 1}
               </div>
               {index < totalSteps - 1 && (
-                <div
-                  className={`h-1 w-12 sm:w-16 md:w-28 lg:w-40 ${
-                    step > index + 1 ? "bg-primary" : "bg-gray-200"
-                  }`}
-                ></div>
+                <div className="flex-1 mx-4">
+                  <div className={`h-px transition-all duration-700 ${
+                    step > index + 1 ? "bg-primary" : "bg-white/10"
+                  }`}></div>
+                </div>
               )}
             </div>
           ))}
         </div>
-        <div className="flex justify-between mt-2 text-xs md:text-sm">
-          <span className="font-medium">Bank Details</span>
-          <span className="font-medium">Contact Info</span>
-          <span className="font-medium">Account Setup</span>
+        <div className="flex justify-between mt-4">
+          <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${step === 1 ? "text-primary-light" : "text-white/80"}`}>Bank Details</span>
+          <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${step === 2 ? "text-primary-light" : "text-white/80"}`}>Contact Info</span>
+          <span className={`text-[9px] font-black uppercase tracking-widest transition-colors ${step === 3 ? "text-primary-light" : "text-white/80"}`}>Account Setup</span>
         </div>
       </div>
 
       <form onSubmit={handleSubmit}>
         {/* Step 1: Bank Details */}
         {step === 1 && (
-          <div>
-            <div className="mb-4">
+          <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+            <div>
               <label
                 htmlFor="bankName"
-                className="block text-gray-700 mb-2 font-medium"
+                className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
               >
                 Bank Name
               </label>
@@ -180,24 +179,24 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                 name="bankName"
                 value={formData.bankName}
                 onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.bankName ? "border-accent-red" : "border-gray-300"
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                  errors.bankName ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
                 }`}
-                placeholder="Enter your bank's official name"
+                placeholder="Institution Name"
               />
               {errors.bankName && (
-                <p className="text-accent-red text-sm mt-1">
+                <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
                   {errors.bankName}
                 </p>
               )}
             </div>
 
-            <div className="mb-4">
+            <div>
               <label
                 htmlFor="branchAddresses"
-                className="block text-gray-700 mb-2 font-medium"
+                className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
               >
-                Branch Addresses within FCT
+                FCT Branch Matrix
               </label>
               <textarea
                 id="branchAddresses"
@@ -205,77 +204,82 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                 value={formData.branchAddresses}
                 onChange={handleChange}
                 rows={3}
-                className={`w-full p-3 border rounded-md ${
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none ${
                   errors.branchAddresses
-                    ? "border-accent-red"
-                    : "border-gray-300"
+                    ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                    : "border-white/10 focus:border-primary"
                 }`}
-                placeholder="List all branch addresses in FCT (one per line)"
+                placeholder="List official FCT branch locations..."
               ></textarea>
               {errors.branchAddresses && (
-                <p className="text-accent-red text-sm mt-1">
+                <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
                   {errors.branchAddresses}
                 </p>
               )}
             </div>
 
-            <div className="mb-4">
-              <label
-                htmlFor="taxIdNumber"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                Tax ID Number
-              </label>
-              <input
-                type="text"
-                id="taxIdNumber"
-                name="taxIdNumber"
-                value={formData.taxIdNumber}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.taxIdNumber ? "border-accent-red" : "border-gray-300"
-                }`}
-                placeholder="Enter your bank's tax ID number"
-              />
-              {errors.taxIdNumber && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.taxIdNumber}
-                </p>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="taxIdNumber"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  Tax ID
+                </label>
+                <input
+                  type="text"
+                  id="taxIdNumber"
+                  name="taxIdNumber"
+                  value={formData.taxIdNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.taxIdNumber ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="TIN-00000000"
+                />
+                {errors.taxIdNumber && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.taxIdNumber}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="cacRegNumber"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  CAC Registration
+                </label>
+                <input
+                  type="text"
+                  id="cacRegNumber"
+                  name="cacRegNumber"
+                  value={formData.cacRegNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.cacRegNumber ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="RC-000000"
+                />
+                {errors.cacRegNumber && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.cacRegNumber}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mb-6">
-              <label
-                htmlFor="cacRegNumber"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                CAC Registration Number
-              </label>
-              <input
-                type="text"
-                id="cacRegNumber"
-                name="cacRegNumber"
-                value={formData.cacRegNumber}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.cacRegNumber ? "border-accent-red" : "border-gray-300"
-                }`}
-                placeholder="Enter your CAC registration number"
-              />
-              {errors.cacRegNumber && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.cacRegNumber}
-                </p>
-              )}
-            </div>
-
-            <div className="flex justify-end">
+            <div className="flex justify-end pt-4">
               <button
                 type="button"
                 onClick={nextStep}
-                className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark transition"
+                className="btn-primary px-10 py-4 text-xs font-black uppercase tracking-widest flex items-center"
               >
-                Next
+                Proceed Connection
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
               </button>
             </div>
           </div>
@@ -283,13 +287,13 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
 
         {/* Step 2: Contact Information */}
         {step === 2 && (
-          <div>
-            <div className="mb-4">
+          <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+            <div>
               <label
                 htmlFor="mdName"
-                className="block text-gray-700 mb-2 font-medium"
+                className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
               >
-                Managing Director's Name
+                Executive Principal
               </label>
               <input
                 type="text"
@@ -297,45 +301,74 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                 name="mdName"
                 value={formData.mdName}
                 onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.mdName ? "border-accent-red" : "border-gray-300"
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                  errors.mdName ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
                 }`}
-                placeholder="Enter MD's full name"
+                placeholder="MD / CEO Full Name"
               />
               {errors.mdName && (
-                <p className="text-accent-red text-sm mt-1">{errors.mdName}</p>
-              )}
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="mdPhoneNumber"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                MD's Phone Number
-              </label>
-              <input
-                type="text"
-                id="mdPhoneNumber"
-                name="mdPhoneNumber"
-                value={formData.mdPhoneNumber}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.mdPhoneNumber ? "border-accent-red" : "border-gray-300"
-                }`}
-                placeholder="Enter MD's phone number"
-              />
-              {errors.mdPhoneNumber && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.mdPhoneNumber}
+                <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                  {errors.mdName}
                 </p>
               )}
             </div>
 
-            <div className="mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="mdPhoneNumber"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  Priority Contact
+                </label>
+                <input
+                  type="text"
+                  id="mdPhoneNumber"
+                  name="mdPhoneNumber"
+                  value={formData.mdPhoneNumber}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.mdPhoneNumber ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="+234..."
+                />
+                {errors.mdPhoneNumber && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.mdPhoneNumber}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="officialEmail"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  Official Gateway
+                </label>
+                <input
+                  type="email"
+                  id="officialEmail"
+                  name="officialEmail"
+                  value={formData.officialEmail}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.officialEmail ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="admin@institution.com"
+                />
+                {errors.officialEmail && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.officialEmail}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div>
               <label
                 htmlFor="hqAddress"
-                className="block text-gray-700 mb-2 font-medium"
+                className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
               >
                 Headquarters Address
               </label>
@@ -345,57 +378,35 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                 value={formData.hqAddress}
                 onChange={handleChange}
                 rows={2}
-                className={`w-full p-3 border rounded-md ${
-                  errors.hqAddress ? "border-accent-red" : "border-gray-300"
+                className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none ${
+                    errors.hqAddress ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
                 }`}
-                placeholder="Enter your headquarters address"
+                placeholder="Full operational address..."
               ></textarea>
               {errors.hqAddress && (
-                <p className="text-accent-red text-sm mt-1">
+                <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
                   {errors.hqAddress}
                 </p>
               )}
             </div>
 
-            <div className="mb-6">
-              <label
-                htmlFor="officialEmail"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                Official Email
-              </label>
-              <input
-                type="email"
-                id="officialEmail"
-                name="officialEmail"
-                value={formData.officialEmail}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.officialEmail ? "border-accent-red" : "border-gray-300"
-                }`}
-                placeholder="Enter your bank's official email"
-              />
-              {errors.officialEmail && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.officialEmail}
-                </p>
-              )}
-            </div>
-
-            <div className="flex justify-between">
+            <div className="flex justify-between pt-4">
               <button
                 type="button"
                 onClick={prevStep}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition"
+                className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/80 hover:text-white transition-all flex items-center"
               >
-                Back
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Reverse
               </button>
               <button
                 type="button"
                 onClick={nextStep}
-                className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark transition"
+                className="btn-primary px-10 py-4 text-xs font-black uppercase tracking-widest"
               >
-                Next
+                Verify & Proceed
               </button>
             </div>
           </div>
@@ -403,66 +414,68 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
 
         {/* Step 3: Account Setup */}
         {step === 3 && (
-          <div>
-            <div className="mb-4">
-              <label
-                htmlFor="password"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                Create Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.password ? "border-accent-red" : "border-gray-300"
-                }`}
-                placeholder="Enter a secure password"
-              />
-              {errors.password && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.password}
-                </p>
-              )}
+          <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  Secure Access Code
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.password ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]" : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="••••••••"
+                />
+                {errors.password && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
+                >
+                  Confirm Code
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
+                    errors.confirmPassword
+                      ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                      : "border-white/10 focus:border-primary"
+                  }`}
+                  placeholder="••••••••"
+                />
+                {errors.confirmPassword && (
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
+                    {errors.confirmPassword}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label
-                htmlFor="confirmPassword"
-                className="block text-gray-700 mb-2 font-medium"
-              >
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                className={`w-full p-3 border rounded-md ${
-                  errors.confirmPassword
-                    ? "border-accent-red"
-                    : "border-gray-300"
-                }`}
-                placeholder="Confirm your password"
-              />
-              {errors.confirmPassword && (
-                <p className="text-accent-red text-sm mt-1">
-                  {errors.confirmPassword}
-                </p>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-4">
               <div>
                 <label
                   htmlFor="posAgentsCount"
-                  className="block text-gray-700 mb-2 font-medium"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
                 >
-                  Number of POS Agents
+                  Active POS Fleet
                 </label>
                 <input
                   type="number"
@@ -471,15 +484,15 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                   value={formData.posAgentsCount || ""}
                   onChange={handleChange}
                   min="1"
-                  className={`w-full p-3 border rounded-md ${
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
                     errors.posAgentsCount
-                      ? "border-accent-red"
-                      : "border-gray-300"
+                      ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                      : "border-white/10 focus:border-primary"
                   }`}
-                  placeholder="Enter number of agents"
+                  placeholder="Unit Count"
                 />
                 {errors.posAgentsCount && (
-                  <p className="text-accent-red text-sm mt-1">
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
                     {errors.posAgentsCount}
                   </p>
                 )}
@@ -488,9 +501,9 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
               <div>
                 <label
                   htmlFor="yearsOfOperation"
-                  className="block text-gray-700 mb-2 font-medium"
+                  className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-2 ml-1"
                 >
-                  Years of Operation
+                  Sector Longevity
                 </label>
                 <input
                   type="number"
@@ -499,34 +512,37 @@ const BankOnboardingForm = ({ onSubmit }: BankOnboardingFormProps) => {
                   value={formData.yearsOfOperation || ""}
                   onChange={handleChange}
                   min="1"
-                  className={`w-full p-3 border rounded-md ${
+                  className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all ${
                     errors.yearsOfOperation
-                      ? "border-accent-red"
-                      : "border-gray-300"
+                      ? "border-accent-red/50 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                      : "border-white/10 focus:border-primary"
                   }`}
-                  placeholder="Enter years in operation"
+                  placeholder="Years Active"
                 />
                 {errors.yearsOfOperation && (
-                  <p className="text-accent-red text-sm mt-1">
+                  <p className="text-accent-red text-[10px] font-bold uppercase mt-2 ml-1 tracking-wide">
                     {errors.yearsOfOperation}
                   </p>
                 )}
               </div>
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between pt-4">
               <button
                 type="button"
                 onClick={prevStep}
-                className="bg-gray-300 text-gray-700 px-6 py-2 rounded-md hover:bg-gray-400 transition"
+                className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/80 hover:text-white transition-all flex items-center"
               >
-                Back
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M11 17l-5-5m0 0l5-5m-5 5h12" />
+                </svg>
+                Previous
               </button>
               <button
                 type="submit"
-                className="bg-primary text-white px-6 py-2 rounded-md hover:bg-primary-dark transition"
+                className="btn-primary px-10 py-4 text-sm font-black uppercase tracking-widest shadow-[0_0_30px_rgba(0,109,53,0.3)]"
               >
-                Submit Registration
+                Transmit Registration
               </button>
             </div>
           </div>

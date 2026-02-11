@@ -77,343 +77,146 @@ const BankPaymentHistory = () => {
           (payment) => payment.status.toLowerCase() === filterStatus
         );
 
-  // Status badge component
-  const getStatusBadge = (status: Payment["status"]) => {
-    switch (status) {
-      case "Successful":
-        return (
-          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-            Successful
-          </span>
-        );
-      case "Pending":
-        return (
-          <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-            Pending
-          </span>
-        );
-      case "Failed":
-        return (
-          <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
-            Failed
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
 
-  // Mobile card for responsive design
-  const MobilePaymentCard = ({ payment }: { payment: Payment }) => {
-    return (
-      <div className="bg-white p-4 rounded-lg shadow-sm mb-3 border-l-4 border-primary">
-        <div className="flex justify-between items-center mb-2">
-          <span className="font-medium text-primary">
-            #{payment.invoiceNumber}
-          </span>
-          <div>{getStatusBadge(payment.status)}</div>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-          <div>
-            <p className="text-gray-500">Payment ID</p>
-            <p className="font-medium">{payment.id}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Date</p>
-            <p className="font-medium">{payment.date}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Amount</p>
-            <p className="font-medium">{formatCurrency(payment.amount)}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Method</p>
-            <p className="font-medium">{payment.method}</p>
-          </div>
-          <div className="col-span-2">
-            <p className="text-gray-500">Reference</p>
-            <p className="font-medium">{payment.reference}</p>
-          </div>
-          <div className="col-span-2">
-            <p className="text-gray-500">Period</p>
-            <p className="font-medium">{payment.period}</p>
-          </div>
-        </div>
-        {payment.status === "Successful" && payment.receiptUrl && (
-          <div className="flex justify-end">
-            <button className="text-primary hover:text-primary-dark text-sm font-medium flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-              View Receipt
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">
-          Payment History
+      <div className="mb-10">
+        <h1 className="text-3xl font-black text-white mb-2 font-heading tracking-tighter text-glow">
+          Payment Ledger
         </h1>
-        <p className="text-gray-600">
-          View and manage your tax payment records
+        <p className="text-white/80 text-xs font-black uppercase tracking-[0.2em]">
+          Institutional Remittance History • Sequential Transaction Logs • Fiscal Manifest
         </p>
       </div>
 
       {/* Filter Controls */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">Filter by status:</span>
-          <div className="inline-flex rounded-md shadow-sm">
-            <button
-              onClick={() => setFilterStatus("all")}
-              className={`px-3 py-1 text-sm rounded-l-md ${
-                filterStatus === "all"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterStatus("successful")}
-              className={`px-3 py-1 text-sm ${
-                filterStatus === "successful"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border-t border-b border-gray-300`}
-            >
-              Successful
-            </button>
-            <button
-              onClick={() => setFilterStatus("pending")}
-              className={`px-3 py-1 text-sm ${
-                filterStatus === "pending"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border-t border-b border-gray-300`}
-            >
-              Pending
-            </button>
-            <button
-              onClick={() => setFilterStatus("failed")}
-              className={`px-3 py-1 text-sm rounded-r-md ${
-                filterStatus === "failed"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              Failed
-            </button>
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center mb-10 gap-8">
+        <div className="flex items-center space-x-6">
+          <span className="text-[10px] font-black text-white/80 uppercase tracking-widest">Protocol Filter:</span>
+          <div className="flex p-1 bg-white/5 rounded-2xl border border-white/10">
+            {["all", "successful", "pending", "failed"].map((status) => (
+              <button
+                key={status}
+                onClick={() => setFilterStatus(status)}
+                className={`px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
+                  filterStatus === status 
+                    ? "bg-primary text-white shadow-[0_0_15px_rgba(0,109,53,0.4)]" 
+                    : "text-white/80 hover:text-white"
+                }`}
+              >
+                {status}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <input
-            type="text"
-            placeholder="Search by ID or Reference..."
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary w-full sm:w-auto"
-          />
-          <button className="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark transition">
-            Search
+        
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <div className="relative group">
+            <input
+              type="text"
+              placeholder="Search Ledger (ID / RF)..."
+              className="w-full sm:w-72 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-xs text-white placeholder:text-white/80 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
+          </div>
+          <button className="btn-primary px-8 py-3 text-[10px] tracking-widest uppercase font-black">
+            Execute Search
           </button>
         </div>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-green-500 flex items-center">
-          <div className="bg-green-100 p-3 rounded-full mr-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-green-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-10">
+        {[
+          { label: "Successful Cycles", count: payments.filter((p) => p.status === "Successful").length, color: "primary", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
+          { label: "Pending Verification", count: payments.filter((p) => p.status === "Pending").length, color: "blue", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" },
+          { label: "Failed Protocols", count: payments.filter((p) => p.status === "Failed").length, color: "accent-red", icon: "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" },
+        ].map((stat, idx) => (
+          <div key={idx} className="glass-card p-6 rounded-3xl border-white/5 bg-white/2 relative overflow-hidden group">
+            <div className={`absolute top-0 right-0 w-24 h-24 bg-${stat.color}/5 blur-3xl -mr-10 -mt-10 group-hover:bg-${stat.color}/10 transition-colors`}></div>
+            <div className="flex items-center space-x-6 relative z-10">
+              <div className={`w-14 h-14 rounded-2xl bg-${stat.color}/10 flex items-center justify-center border border-${stat.color}/20`}>
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 text-${stat.color === 'primary' ? 'primary-light' : stat.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={stat.icon} />
+                </svg>
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-white/80 uppercase tracking-[0.2em] mb-1">{stat.label}</p>
+                <p className="text-2xl font-black text-white uppercase tracking-tighter">{stat.count}</p>
+              </div>
+            </div>
           </div>
-          <div>
-            <p className="text-sm text-gray-500">Successful Payments</p>
-            <p className="text-xl font-bold text-gray-800">
-              {payments.filter((p) => p.status === "Successful").length}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-500 flex items-center">
-          <div className="bg-blue-100 p-3 rounded-full mr-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-blue-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Pending Payments</p>
-            <p className="text-xl font-bold text-gray-800">
-              {payments.filter((p) => p.status === "Pending").length}
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-red-500 flex items-center">
-          <div className="bg-red-100 p-3 rounded-full mr-4">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-red-500"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500">Failed Payments</p>
-            <p className="text-xl font-bold text-gray-800">
-              {payments.filter((p) => p.status === "Failed").length}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile view */}
-      <div className="block md:hidden">
-        {filteredPayments.map((payment) => (
-          <MobilePaymentCard key={payment.id} payment={payment} />
         ))}
       </div>
 
+
       {/* Desktop view */}
-      <div className="hidden md:block bg-white rounded-lg shadow-md overflow-hidden">
+      <div className="hidden md:block glass-card border-white/5 bg-white/2 rounded-[2rem] overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Payment ID
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Invoice #
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Method
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Period
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+          <table className="min-w-full divide-y divide-white/5">
+            <thead>
+              <tr className="bg-white/2">
+                {["Payment ID", "Invoice #", "Date", "Amount", "Method", "Period", "Status", "Actions"].map((header) => (
+                  <th key={header} className="px-6 py-5 text-left text-[10px] font-black text-white/80 uppercase tracking-widest">
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {filteredPayments.map((payment) => (
-                <tr key={payment.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-primary">
+                <tr key={payment.id} className="hover:bg-white/5 transition-colors group">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-black text-primary-light uppercase tracking-widest">
                     {payment.id}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {payment.invoiceNumber}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {payment.date}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tight">
                     {formatCurrency(payment.amount)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {payment.method}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {payment.period}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {getStatusBadge(payment.status)}
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                      payment.status === 'Successful' ? 'bg-primary/10 text-primary-light border border-primary/20' :
+                      payment.status === 'Pending' ? 'bg-blue/10 text-blue border border-blue/20' :
+                      'bg-accent-red/10 text-accent-red border border-accent-red/20'
+                    }`}>
+                      {payment.status}
+                    </span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    {payment.status === "Successful" && payment.receiptUrl && (
-                      <button className="text-primary hover:text-primary-dark font-medium flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                        Receipt
-                      </button>
-                    )}
-                    {payment.status === "Failed" && (
-                      <button className="text-accent-red hover:text-red-700 font-medium flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                          />
-                        </svg>
-                        Retry
-                      </button>
-                    )}
+                  <td className="px-6 py-5 whitespace-nowrap text-xs">
+                    <div className="flex items-center space-x-4">
+                      {payment.status === "Successful" && payment.receiptUrl && (
+                        <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest flex items-center transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                          Manifest
+                        </button>
+                      )}
+                      {payment.status === "Failed" && (
+                        <button className="text-[10px] font-black text-accent-red hover:text-white uppercase tracking-widest flex items-center transition-colors">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                          Re-Sync
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -423,32 +226,34 @@ const BankPaymentHistory = () => {
       </div>
 
       {/* Payment Information */}
-      <div className="mt-6 bg-white p-4 md:p-6 rounded-lg shadow-md">
-        <h3 className="text-lg font-medium text-primary mb-4">
-          Payment Information
+      <div className="mt-10 glass-card border-white/5 bg-white/2 p-8 md:p-12 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,#006D3508,transparent)] pointer-events-none"></div>
+        <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-12">
+          Protocol Documentation
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <h4 className="font-medium text-gray-700 mb-2">Payment Methods</h4>
-            <ul className="list-disc list-inside text-sm text-gray-600 space-y-2">
-              <li>Bank Transfer to FCT-POS Collection Account</li>
-              <li>Card Payment via Quickteller</li>
-              <li>Direct Debit (requires pre-authorization)</li>
-              <li>USSD Payment using bank USSD codes</li>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <h4 className="text-[10px] font-black text-white/80 uppercase tracking-widest flex items-center">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></span>
+              Supported Remittance Channels
+            </h4>
+            <ul className="text-xs font-medium text-white/80 space-y-4 uppercase tracking-wider">
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Institutional Bank Transfer (FCT-POS Collection Node)</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Cryptographic Card Processing via Core Gateway</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Authorized Direct Debit Protocols</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Mobile USSD Transaction Interface</li>
             </ul>
           </div>
-          <div>
-            <h4 className="font-medium text-gray-700 mb-2">Payment Timeline</h4>
-            <ul className="list-disc list-inside text-sm text-gray-600 space-y-2">
-              <li>Payments are due within 14 days of invoice generation</li>
-              <li>Late payments may attract a 5% penalty fee</li>
-              <li>
-                Receipts are generated immediately for successful payments
-              </li>
-              <li>
-                Payment status updates may take up to 24 hours for bank
-                transfers
-              </li>
+          <div className="space-y-6">
+            <h4 className="text-[10px] font-black text-white/80 uppercase tracking-widest flex items-center">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full mr-3"></span>
+              Institutional Timelines
+            </h4>
+            <ul className="text-xs font-medium text-white/80 space-y-4 uppercase tracking-wider">
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Remittance Deadline: T+14 Days (Post-Manifest Generation)</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Latency Penalty: 5.0% Protocol Surcharge on Expiry</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Real-time Manifest Generation on Protocol Success</li>
+              <li className="flex items-center"><span className="w-1 h-1 bg-white/20 rounded-full mr-3"></span>Propagation Delay: Up to 24 Hours (Internal Node Sync)</li>
             </ul>
           </div>
         </div>

@@ -18,137 +18,144 @@ const Registration = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-light py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-secondary py-20 px-4 relative overflow-hidden text-white font-sans selection:bg-primary/30">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#006D3511,transparent)] pointer-events-none"></div>
+
+      <div className="max-w-4xl mx-auto relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <Logo size="large" />
+        <div className="text-center mb-16 animate-in fade-in duration-1000">
+          <div className="flex justify-center mb-6">
+            <div className="bg-white/5 p-4 rounded-3xl backdrop-blur-md border border-white/10 shadow-2xl">
+              <Logo size="large" />
+            </div>
           </div>
-          <h1 className="text-3xl font-bold text-primary font-heading">
-            FCT Agency POS Taxation
+          <h1 className="text-4xl font-black text-white font-heading tracking-tighter text-glow">
+            Agency <span className="text-primary-light">Registration</span>
           </h1>
-          <p className="mt-2 text-xl text-gray-600">Bank Registration Portal</p>
+          <p className="mt-4 text-white/80 font-medium uppercase tracking-[0.2em] text-xs">Register your institution with the POS system</p>
         </div>
 
         {!isSubmitted ? (
-          <BankOnboardingForm onSubmit={handleSubmit} />
+          <div className="glass-card p-1 rounded-[2.5rem] border-white/5 bg-white/2">
+            <div className="bg-[#05080F]/80 backdrop-blur-3xl p-8 md:p-12 rounded-[2.3rem]">
+              <BankOnboardingForm onSubmit={handleSubmit} />
+            </div>
+          </div>
         ) : (
-          <div className="bg-white p-6 md:p-8 rounded-lg shadow-md">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-8 w-8"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-primary mb-2 font-heading">
-                Registration Successful!
-              </h2>
-              <p className="text-gray-600">
-                Thank you for registering {submittedData?.bankName} with the FCT
-                Agency POS Taxation.
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-4 md:p-6 rounded-md border border-gray-200 mb-6">
-              <h3 className="text-lg font-medium text-primary mb-4 font-heading">
-                Registration Details
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-500">Bank Name</p>
-                  <p className="font-medium">{submittedData?.bankName}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Tax ID Number</p>
-                  <p className="font-medium">{submittedData?.taxIdNumber}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Official Email</p>
-                  <p className="font-medium">{submittedData?.officialEmail}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">POS Agents</p>
-                  <p className="font-medium">{submittedData?.posAgentsCount}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-primary bg-opacity-5 p-4 md:p-6 rounded-md border border-primary border-opacity-20 mb-6">
-              <div className="flex flex-col md:flex-row">
-                <div className="text-primary mr-4 mb-3 md:mb-0 flex justify-center md:block">
+          <div className="glass-card p-1 items-center overflow-hidden rounded-[2.5rem] border-white/5 bg-white/2 shadow-[0_0_50px_rgba(0,0,0,0.3)]">
+            <div className="bg-[#05080F]/90 backdrop-blur-3xl p-12 md:p-20 rounded-[2.3rem]">
+              <div className="text-center mb-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-primary/10 border-2 border-primary shadow-[0_0_30px_rgba(0,109,53,0.3)] text-primary-high mb-8">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
+                    className="h-10 w-10"
                     fill="none"
-                    viewBox="0 0 24 24"
                     stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
                     />
                   </svg>
                 </div>
-                <div>
-                  <h3 className="font-medium text-primary mb-2 font-heading text-center md:text-left">
-                    Next Steps
-                  </h3>
-                  <p className="text-gray-600 mb-2">
-                    Your registration is currently under review. Please check
-                    your email at{" "}
-                    <span className="font-medium">
-                      {submittedData?.officialEmail}
-                    </span>{" "}
-                    for verification instructions.
-                  </p>
-                  <p className="text-gray-600">
-                    Once verified, you will receive your login credentials to
-                    access the bank portal.
-                  </p>
+                <h2 className="text-3xl font-black text-white mb-4 font-heading tracking-tight text-glow">
+                  Registration Successful!
+                </h2>
+                <p className="text-white/80 font-medium">
+                  We have received the registration for {submittedData?.bankName}.
+                </p>
+              </div>
+
+              <div className="bg-white/2 backdrop-blur-md rounded-3xl p-8 border border-white/5 mb-10">
+                <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">Registration Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest mb-1">Institution</p>
+                    <p className="text-sm font-bold text-white uppercase">{submittedData?.bankName}</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest mb-1">Tax ID</p>
+                    <p className="text-sm font-bold text-white uppercase">{submittedData?.taxIdNumber}</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest mb-1">Email</p>
+                    <p className="text-sm font-bold text-white uppercase">{submittedData?.officialEmail}</p>
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest mb-1">POS Agents</p>
+                    <p className="text-sm font-bold text-white uppercase">{submittedData?.posAgentsCount}</p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex justify-center">
-              <Link
-                to="/"
-                className="px-6 py-3 bg-primary text-white rounded-md hover:bg-primary-dark transition"
-              >
-                Return to Home
-              </Link>
+              <div className="bg-primary/5 rounded-3xl p-8 border border-primary/20 mb-10 relative overflow-hidden">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#006D3522,transparent)] pointer-events-none"></div>
+                <div className="flex flex-col md:flex-row gap-6 relative z-10">
+                  <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-primary-light"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-black text-white mb-3 font-heading uppercase tracking-widest">
+                      Protocol & Next Steps
+                    </h3>
+                    <p className="text-white/80 text-xs font-medium leading-relaxed mb-4">
+                      Your application is now undergoing institutional verification. Please check your email at{" "}
+                      <span className="text-primary-light font-bold">
+                        {submittedData?.officialEmail}
+                      </span>{" "}
+                      for further instructions.
+                    </p>
+                    <p className="text-white/80 text-xs font-medium leading-relaxed">
+                      Verification normally completes within 24 hours.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                <Link
+                  to="/"
+                  className="btn-primary px-10 py-4 text-xs tracking-widest uppercase font-black"
+                >
+                  Return to Home
+                </Link>
+              </div>
             </div>
           </div>
         )}
 
-        <div className="mt-8 text-center">
-          <p className="text-gray-600">
+        <div className="mt-16 text-center">
+          <p className="text-white/80 text-xs font-medium uppercase tracking-widest">
             Already registered?{" "}
             <Link
               to="/login"
-              className="text-primary font-medium hover:text-primary-dark"
+              className="text-primary-light font-bold hover:text-white transition-colors ml-2"
             >
-              Login here
+              Log In
             </Link>
           </p>
-          <p className="mt-2 text-sm text-gray-500">
-            For assistance, please contact{" "}
+          <p className="mt-4 text-[10px] text-white/80 font-medium uppercase tracking-[0.2em]">
+            Support:{" "}
             <a
               href="mailto:support@fctpostaxation.gov.ng"
-              className="text-primary"
+              className="hover:text-white transition-colors"
             >
               support@fctpostaxation.gov.ng
             </a>

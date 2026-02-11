@@ -113,37 +113,50 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-light flex items-center justify-center p-4">
-      <div className="bg-white rounded-lg shadow-md w-full max-w-md overflow-hidden">
-        <div className="bg-primary p-6 flex flex-col items-center">
+    <div className="min-h-screen bg-secondary flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent-gold/10 blur-[120px] rounded-full"></div>
+      </div>
+
+      <div className="glass-card w-full max-w-md overflow-hidden relative z-10 border-white/20">
+        <div className="bg-prime-gradient p-8 flex flex-col items-center border-b border-white/10">
           {/* Abuja Logo */}
-          <Logo size="large" className="mb-4" />
-          <h1 className="text-white text-xl font-bold">
-            FCT Agency POS Taxation
+          <div className="bg-white/10 p-4 rounded-full backdrop-blur-md mb-4 border border-white/20 shadow-xl">
+            <Logo size="large" />
+          </div>
+          <h1 className="text-white text-2xl font-bold font-heading tracking-tight text-glow">
+            FCT POS Taxation
           </h1>
-          <p className="text-white text-sm opacity-90">
-            Federal Capital Territory, Abuja
+          <p className="text-white/80 text-sm font-medium uppercase tracking-widest mt-1">
+            System Portal
           </p>
         </div>
 
-        <div className="p-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-6 text-center">
-            Login to Your Account
+        <div className="p-8">
+          <h2 className="text-xl font-bold text-white mb-8 text-center font-heading">
+            Secure Log In
           </h2>
 
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md text-sm">
-              {error}
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 text-red-200 rounded-lg text-sm backdrop-blur-md animate-pulse">
+              <span className="flex items-center">
+                <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {error}
+              </span>
             </div>
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-2 ml-1"
               >
                 Email Address
               </label>
@@ -152,16 +165,16 @@ const Login = () => {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="Enter your email"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300"
+                placeholder="email@example.com"
                 required
               />
             </div>
 
-            <div className="mb-6">
+            <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-xs font-semibold text-white/80 uppercase tracking-wider mb-2 ml-1"
               >
                 Password
               </label>
@@ -170,8 +183,8 @@ const Login = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-                placeholder="Enter your password"
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300"
+                placeholder="••••••••"
                 required
               />
             </div>
@@ -179,14 +192,14 @@ const Login = () => {
             <button
               type="submit"
               disabled={isLoggingIn}
-              className={`w-full bg-primary text-white py-2 rounded-md text-sm font-medium hover:bg-primary-dark transition ${
+              className={`w-full btn-primary py-4 text-base shadow-lg shadow-primary/20 flex items-center justify-center group ${
                 isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
               }`}
             >
               {isLoggingIn ? (
-                <span className="flex items-center justify-center">
+                <span className="flex items-center">
                   <svg
-                    className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                    className="animate-spin h-5 w-5 text-white mr-3"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
@@ -205,30 +218,25 @@ const Login = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Logging in...
+                  Logging In...
                 </span>
               ) : (
-                "Login"
+                <>
+                  Log In
+                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </>
               )}
             </button>
           </form>
 
-          {/* Temporary Credentials Help */}
-          <div className="mt-6 p-3 bg-blue-50 border border-blue-200 rounded-md">
-            <h3 className="text-sm font-medium text-blue-800 mb-2">
-              Demo Credentials
-            </h3>
-            <div className="text-xs text-blue-700">
-              <p className="mb-1">
-                <strong>Bank:</strong> firstbank@example.com / bank123
-              </p>
-              <p className="mb-1">
-                <strong>Consultant:</strong> consultant@example.com /
-                consultant123
-              </p>
-              <p>
-                <strong>Government:</strong> admin@fct.gov.ng / admin123
-              </p>
+          {/* Institutional Badge / Demo Info */}
+          <div className="mt-10 pt-6 border-t border-white/10">
+            <div className="flex items-center justify-center opacity-40 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+              <span className="text-[10px] font-bold text-white uppercase tracking-[4px]">
+                FCT IRS OFFICIAL ACCESS
+              </span>
             </div>
           </div>
         </div>

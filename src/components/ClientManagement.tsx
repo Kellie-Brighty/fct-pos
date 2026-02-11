@@ -90,183 +90,110 @@ const ClientManagement = () => {
     return statusMatch && searchMatch;
   });
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    };
-    return new Date(dateString).toLocaleDateString("en-US", options);
-  };
 
-  // Status badge component
-  const getStatusBadge = (status: Client["status"]) => {
-    switch (status) {
-      case "Active":
-        return (
-          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-            Active
-          </span>
-        );
-      case "Inactive":
-        return (
-          <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
-            Inactive
-          </span>
-        );
-      case "Pending":
-        return (
-          <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">
-            Pending
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">
-          Client Management
-        </h1>
-        <p className="text-gray-600">
-          Manage and monitor your assigned bank clients
-        </p>
+    <div className="space-y-8 md:space-y-12 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 group">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1 uppercase">
+            INSTITUTION <span className="text-primary-light">PORTFOLIO</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Portfolio Intelligence & Governance
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Filter and Search */}
-      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-gray-600">Filter by status:</span>
-          <div className="inline-flex rounded-md shadow-sm">
-            <button
-              onClick={() => setFilterStatus("all")}
-              className={`px-3 py-1 text-sm rounded-l-md ${
-                filterStatus === "all"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterStatus("active")}
-              className={`px-3 py-1 text-sm ${
-                filterStatus === "active"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border-t border-b border-gray-300`}
-            >
-              Active
-            </button>
-            <button
-              onClick={() => setFilterStatus("inactive")}
-              className={`px-3 py-1 text-sm ${
-                filterStatus === "inactive"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border-t border-b border-gray-300`}
-            >
-              Inactive
-            </button>
-            <button
-              onClick={() => setFilterStatus("pending")}
-              className={`px-3 py-1 text-sm rounded-r-md ${
-                filterStatus === "pending"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              Pending
-            </button>
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-8">
+        <div className="space-y-4">
+          <label className="text-[10px] font-black text-white/80 uppercase tracking-widest block pl-1">Status Filter</label>
+          <div className="flex bg-white/2 p-1.5 rounded-2xl border border-white/5 overflow-hidden glass-card">
+            {["all", "active", "inactive", "pending"].map((status) => (
+              <button
+                key={status}
+                onClick={() => setFilterStatus(status)}
+                className={`px-6 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all ${
+                  filterStatus === status ? "bg-primary text-white shadow-2xl shadow-primary/40" : "text-white/80 hover:text-white/80"
+                }`}
+              >
+                {status}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <input
-            type="text"
-            placeholder="Search clients..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary w-full sm:w-auto"
-          />
-          <button className="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark transition">
+        <div className="flex flex-col sm:flex-row items-end gap-4 w-full md:w-auto">
+          <div className="w-full sm:w-80 group">
+            <input
+              type="text"
+              placeholder="Search by name or ID..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-3.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-black uppercase tracking-widest placeholder:text-white/10"
+            />
+          </div>
+          <button className="btn-primary px-10 py-3.5 text-[10px] tracking-widest uppercase font-black">
             Search
           </button>
         </div>
       </div>
 
       {/* Client Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Client
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contact Person
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Phone
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Last Activity
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] overflow-hidden mb-8 w-full">
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="w-full divide-y divide-white/5 table-auto">
+            <thead>
+              <tr className="bg-white/2">
+                <th className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Bank Info</th>
+                <th className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Contact Person</th>
+                <th className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Email & Comms</th>
+                <th className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Status</th>
+                <th className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">Action</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {filteredClients.map((client) => (
-                <tr key={client.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 whitespace-nowrap">
+                <tr key={client.id} className="hover:bg-white/5 transition-all group">
+                  <td className="px-10 py-6 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 h-10 w-10 bg-primary rounded-full flex items-center justify-center text-white font-medium">
-                        {client.name.substring(0, 2)}
+                      <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mr-6 group-hover:scale-110 transition-transform">
+                        <span className="text-xs font-black text-primary-light uppercase">{client.name.substring(0, 2)}</span>
                       </div>
-                      <div className="ml-4">
-                        <div className="text-sm font-medium text-primary">
-                          {client.name}
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {client.type}
-                        </div>
+                      <div>
+                        <p className="text-xs font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest mb-1">{client.name}</p>
+                        <p className="text-[9px] font-black text-white/80 uppercase tracking-widest">{client.type} • {client.id}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest group-hover:text-white transition-colors text-ellipsis overflow-hidden">
                     {client.contactPerson}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {client.email}
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <p className="text-xs font-black text-white/80 tracking-widest mb-1">{client.email}</p>
+                    <p className="text-[9px] font-black text-white/80 tracking-widest uppercase">{client.phone}</p>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {client.phone}
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <span
+                      className={`px-4 py-1 text-[8px] font-black uppercase tracking-widest rounded-full border shadow-[0_0_15px_rgba(0,0,0,0.1)] ${
+                        client.status === "Active"
+                          ? "bg-primary/10 text-primary-light border-primary/20"
+                          : client.status === "Inactive"
+                          ? "bg-accent-red/10 text-accent-red border-accent-red/20"
+                          : "bg-accent-gold/10 text-accent-gold border-accent-gold/20"
+                      }`}
+                    >
+                      {client.status}
+                    </span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {getStatusBadge(client.status)}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {formatDate(client.lastActivity)}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <button className="text-primary hover:text-primary-dark font-medium mr-3">
-                      View
-                    </button>
-                    <button className="text-gray-600 hover:text-gray-900 font-medium">
-                      Contact
-                    </button>
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <div className="flex space-x-6">
+                      <button className="text-[10px] font-black text-primary-light hover:text-white uppercase tracking-widest transition-colors">Audit</button>
+                      <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-colors">Contact</button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -275,132 +202,60 @@ const ClientManagement = () => {
         </div>
       </div>
 
-      {/* Client Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-medium text-primary mb-2">
-            Client Overview
+      {/* Client Stats cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+        <div className="glass-card p-10 border-white/5 bg-white/2 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-all"></div>
+          <h2 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">
+            Portfolio Overview
           </h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-8">
             <div>
-              <p className="text-sm text-gray-500">Total Clients</p>
-              <p className="text-2xl font-bold text-gray-800">12</p>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Total Banks</p>
+              <p className="text-3xl font-black text-white tracking-tighter tabular-nums">12</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Active</p>
-              <p className="text-2xl font-bold text-green-600">9</p>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Active</p>
+              <p className="text-3xl font-black text-primary-light tracking-tighter tabular-nums">9</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Inactive</p>
-              <p className="text-2xl font-bold text-red-600">2</p>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Inactive</p>
+              <p className="text-3xl font-black text-accent-red tracking-tighter tabular-nums">2</p>
             </div>
             <div>
-              <p className="text-sm text-gray-500">Pending</p>
-              <p className="text-2xl font-bold text-yellow-600">1</p>
+              <p className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-1">Pending</p>
+              <p className="text-3xl font-black text-accent-gold tracking-tighter tabular-nums">1</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-medium text-primary mb-2">
-            Compliance Rate
+        <div className="glass-card p-10 border-white/5 bg-white/2 rounded-[2.5rem] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-all"></div>
+          <h2 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">
+            Compliance Index
           </h2>
-          <div className="mt-2">
-            <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">Average</span>
-              <span className="text-sm font-medium text-gray-800">87%</span>
+          <div className="space-y-6">
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Global Average</span>
+                <span className="text-xs font-black text-white tracking-tighter tabular-nums">87%</span>
+              </div>
+              <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+                <div className="bg-primary h-full rounded-full shadow-[0_0_10px_rgba(0,109,53,0.5)]" style={{ width: "87%" }}></div>
+              </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-primary h-2.5 rounded-full"
-                style={{ width: "87%" }}
-              ></div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">Top Performer</span>
-              <span className="text-sm font-medium text-gray-800">98%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-green-500 h-2.5 rounded-full"
-                style={{ width: "98%" }}
-              ></div>
-            </div>
-          </div>
-          <div className="mt-4">
-            <div className="flex justify-between mb-1">
-              <span className="text-sm text-gray-600">Lowest Performer</span>
-              <span className="text-sm font-medium text-gray-800">65%</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-red-500 h-2.5 rounded-full"
-                style={{ width: "65%" }}
-              ></div>
+            <div>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Top Performance</span>
+                <span className="text-xs font-black text-white tracking-tighter tabular-nums">98%</span>
+              </div>
+              <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+                <div className="bg-primary-light h-full rounded-full shadow-[0_0_10px_rgba(0,134,255,0.5)]" style={{ width: "98%" }}></div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-medium text-primary mb-2">
-            Quick Actions
-          </h2>
-          <div className="space-y-3">
-            <button className="w-full flex items-center justify-between px-4 py-2 bg-primary-light text-primary rounded-md hover:bg-primary hover:text-white transition">
-              <span>Add New Client</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                />
-              </svg>
-            </button>
-            <button className="w-full flex items-center justify-between px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition">
-              <span>Generate Report</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-            </button>
-            <button className="w-full flex items-center justify-between px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition">
-              <span>Schedule Meeting</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Select } from "antd";
 
 const GovernmentBanks = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -128,19 +129,6 @@ const GovernmentBanks = () => {
     return matchesSearch && matchesStatus;
   });
 
-  // Function to get status color class
-  const getStatusColorClass = (status: string) => {
-    switch (status) {
-      case "active":
-        return "bg-green-100 text-green-800";
-      case "pending":
-        return "bg-yellow-100 text-yellow-800";
-      case "suspended":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   // Function to get compliance color class
   const getComplianceColorClass = (compliance: string) => {
@@ -157,124 +145,130 @@ const GovernmentBanks = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-primary">Bank Management</h1>
-        <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
-          <div className="relative">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 group">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1 uppercase">
+            BANK <span className="text-primary-light">REGISTRY</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Institutional Compliance & Node Management
+            </p>
+          </div>
+        </div>
+        
+        <div className="mt-8 md:mt-0 flex flex-wrap gap-4">
+          <div className="relative group/search">
             <input
               type="text"
-              placeholder="Search banks..."
-              className="bg-white border border-gray-300 rounded-md pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary w-full md:w-64"
+              placeholder="Filter nodes..."
+              className="bg-white/2 border border-white/5 rounded-2xl pl-12 pr-6 py-4 text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:ring-2 focus:ring-primary/50 w-full md:w-80 transition-all group-hover/search:bg-white/5"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <div className="absolute left-3 top-2.5 text-gray-400">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-white/80 group-hover/search:text-primary transition-colors">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
           </div>
           
-          <select
-            className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value as any)}
-          >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="suspended">Suspended</option>
-          </select>
+          <div className="flex items-center space-x-2 glass-card bg-white/2 border-white/5 p-1 rounded-2xl">
+            <Select
+              className="w-48 text-white min-h-[48px]"
+              popupClassName="ant-select-dropdown"
+              value={filterStatus}
+              bordered={false}
+              onChange={(value) => setFilterStatus(value)}
+              options={[
+                { value: "all", label: "All Protocols" },
+                { value: "active", label: "Active Status" },
+                { value: "pending", label: "Pending Audit" },
+                { value: "suspended", label: "Protocol Halt" },
+              ]}
+            />
+          </div>
         </div>
       </div>
 
       {/* Bank Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredBanks.map((bank) => (
-          <div key={bank.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center mb-4">
-                <div className={`w-12 h-12 flex-shrink-0 rounded-md bg-primary text-white flex items-center justify-center font-bold text-xl`}>
+          <div key={bank.id} className="glass-card border-white/5 bg-white/2 hover:border-white/10 transition-all group rounded-[2.5rem] relative overflow-hidden flex flex-col justify-between p-8">
+            <div className="absolute -right-12 -top-12 w-48 h-48 bg-white/2 blur-[80px] rounded-full group-hover:bg-white/5 transition-all"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center mb-8">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center font-black text-2xl shadow-[0_0_20px_rgba(0,109,53,0.2)]">
                   {bank.logo}
                 </div>
-                <div className="ml-4">
-                  <h3 className="text-lg font-semibold text-gray-900">{bank.name}</h3>
-                  <div className="flex items-center mt-1">
-                    <span className={`px-2.5 py-0.5 text-xs font-medium rounded-full ${getStatusColorClass(bank.status)}`}>
-                      {bank.status.charAt(0).toUpperCase() + bank.status.slice(1)}
+                <div className="ml-6">
+                  <h3 className="text-xl font-black text-white tracking-tighter mb-2 group-hover:text-primary-light transition-colors">{bank.name}</h3>
+                  <div className="flex items-center space-x-4">
+                    <span className={`px-3 py-1 text-[8px] font-black tracking-widest uppercase rounded-full border shadow-[0_0_15px_rgba(0,0,0,0.1)] 
+                      ${bank.status === 'active' ? 'bg-primary/10 text-primary border-primary/20' : 
+                        bank.status === 'pending' ? 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' : 
+                        'bg-accent-red/10 text-accent-red border-accent-red/20'}`}
+                    >
+                      {bank.status}
                     </span>
-                    <span className={`ml-2 text-sm ${getComplianceColorClass(bank.compliance)}`}>
-                      {bank.compliance} compliance
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${getComplianceColorClass(bank.compliance)}`}>
+                      {bank.compliance} RECON
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2 text-sm text-gray-600">
-                <div className="flex justify-between">
-                  <span>POS Agents:</span>
-                  <span className="font-medium text-gray-900">{bank.posAgents.toLocaleString()}</span>
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between items-center group/item p-4 rounded-[1.5rem] bg-white/1 overflow-hidden transition-all hover:bg-white/2">
+                  <span className="text-[10px] font-black text-white/80 uppercase tracking-widest">Active Nodes</span>
+                  <span className="text-xs font-black text-white tabular-nums tracking-tighter">{bank.posAgents.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Last Declaration:</span>
-                  <span className="font-medium text-gray-900">{bank.lastDeclaration}</span>
+                <div className="flex justify-between items-center group/item p-4 rounded-[1.5rem] bg-white/1 overflow-hidden transition-all hover:bg-white/2">
+                  <span className="text-[10px] font-black text-white/80 uppercase tracking-widest">Last Manifest</span>
+                  <span className="text-xs font-black text-white opacity-60 italic">{bank.lastDeclaration}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>Last Payment:</span>
-                  <span className="font-medium text-gray-900">{bank.lastPayment}</span>
+                <div className="flex justify-between items-center group/item p-4 rounded-[1.5rem] bg-white/1 overflow-hidden transition-all hover:bg-white/2">
+                  <span className="text-[10px] font-black text-white/80 uppercase tracking-widest">Settlement Hub</span>
+                  <span className="text-xs font-black text-white opacity-60 italic">{bank.lastPayment}</span>
                 </div>
               </div>
+            </div>
 
-              <div className="mt-4 flex justify-end">
+            <div className="relative z-10 pt-6 border-t border-white/5 flex flex-col space-y-4">
+              <div className="flex justify-between items-center">
                 <button 
                   onClick={() => handleViewDetails(bank.id)}
-                  className="text-primary hover:text-primary-dark text-sm font-medium"
+                  className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all"
                 >
-                  {selectedBank === bank.id ? "Hide Details" : "View Details"}
+                  {selectedBank === bank.id ? "Minimize Sequence" : "Analyze Node"}
                 </button>
+                <div className="flex space-x-4">
+                    <button className="text-[10px] font-black text-primary hover:text-white uppercase tracking-widest transition-all">Relay</button>
+                    <button className="text-[10px] font-black text-accent-red/40 hover:text-accent-red uppercase tracking-widest transition-all">Halt</button>
+                </div>
               </div>
             </div>
 
             {/* Expandable Details Section */}
             {selectedBank === bank.id && (
-              <div className="bg-gray-50 p-6 border-t border-gray-200">
-                <h4 className="font-medium text-gray-900 mb-3">Bank Details</h4>
-                <div className="space-y-2 text-sm">
+              <div className="mt-8 p-6 bg-white/2 border border-white/5 rounded-[2rem] animate-in slide-in-from-top-4 duration-500">
+                <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-4">Node Identity Protocol</h4>
+                <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Registration Date:</span>
-                    <span className="text-gray-900">{bank.registrationDate}</span>
+                    <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Commissioned</span>
+                    <span className="text-[10px] font-black text-white/80 tracking-widest">{bank.registrationDate}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Contact Person:</span>
-                    <span className="text-gray-900">{bank.contactPerson}</span>
+                    <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Controller</span>
+                    <span className="text-[10px] font-black text-white/80 tracking-widest">{bank.contactPerson}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Email:</span>
-                    <span className="text-gray-900">{bank.email}</span>
+                  <div className="flex flex-col mt-2">
+                    <span className="text-[8px] font-black text-white/10 uppercase tracking-widest mb-1">Communication Channel</span>
+                    <span className="text-[10px] font-black text-primary-light/60 truncate tracking-tighter">{bank.email}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Phone:</span>
-                    <span className="text-gray-900">{bank.phone}</span>
-                  </div>
-                </div>
-                
-                <div className="mt-4 flex space-x-2">
-                  <button className="bg-primary text-white px-3 py-1.5 rounded text-sm hover:bg-primary-dark transition">
-                    Message
-                  </button>
-                  <button className="bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-sm hover:bg-gray-300 transition">
-                    View Transactions
-                  </button>
-                  {bank.status === "suspended" ? (
-                    <button className="bg-green-500 text-white px-3 py-1.5 rounded text-sm hover:bg-green-600 transition">
-                      Reinstate
-                    </button>
-                  ) : (
-                    <button className="bg-red-500 text-white px-3 py-1.5 rounded text-sm hover:bg-red-600 transition">
-                      Suspend
-                    </button>
-                  )}
                 </div>
               </div>
             )}
@@ -283,41 +277,40 @@ const GovernmentBanks = () => {
       </div>
 
       {filteredBanks.length === 0 && (
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div className="glass-card rounded-[2.5rem] p-20 text-center border-white/5 bg-white/2">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto text-white/10 mb-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-gray-900">No banks found</h3>
-          <p className="mt-2 text-gray-500">
-            Try adjusting your search or filter criteria to find what you're looking for.
+          <h3 className="text-2xl font-black text-white tracking-tighter mb-4 uppercase">NO NODES DETECTED</h3>
+          <p className="text-[10px] text-white/80 font-black uppercase tracking-widest max-w-xs mx-auto">
+            The current search parameters have returned zero matches in the secure registry.
           </p>
         </div>
       )}
 
       {/* Summary Stats */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-medium text-gray-700 mb-4">Bank Statistics</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-gray-50 p-4 rounded-md">
-            <div className="text-sm text-gray-500">Total Banks</div>
-            <div className="text-2xl font-bold text-primary">{banks.length}</div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-md">
-            <div className="text-sm text-gray-500">Active Banks</div>
-            <div className="text-2xl font-bold text-green-600">{banks.filter(b => b.status === "active").length}</div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-md">
-            <div className="text-sm text-gray-500">Pending Banks</div>
-            <div className="text-2xl font-bold text-yellow-600">{banks.filter(b => b.status === "pending").length}</div>
-          </div>
-          <div className="bg-gray-50 p-4 rounded-md">
-            <div className="text-sm text-gray-500">Suspended Banks</div>
-            <div className="text-2xl font-bold text-red-600">{banks.filter(b => b.status === "suspended").length}</div>
-          </div>
+      <div className="glass-card border-white/5 bg-white/2 rounded-[2.5rem] p-10 shadow-2xl overflow-hidden relative group">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-[100px] rounded-full -mr-32 -mt-32 group-hover:bg-primary/10 transition-all duration-700"></div>
+        <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-10 relative z-10">INSTITUTIONAL METRICS</h3>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+          {[
+            { label: "Total Institutional Nodes", val: banks.length, color: "white" },
+            { label: "Active Connections", val: banks.filter(b => b.status === "active").length, color: "primary" },
+            { label: "Pending Validation", val: banks.filter(b => b.status === "pending").length, color: "accent-gold" },
+            { label: "Protocol Halts", val: banks.filter(b => b.status === "suspended").length, color: "accent-red" },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-white/2 border border-white/5 p-8 rounded-[2rem] hover:bg-white/5 transition-all">
+              <div className="text-[9px] font-black text-white/80 uppercase tracking-widest mb-4 leading-relaxed">{stat.label}</div>
+              <div className={`text-4xl font-black text-${stat.color === 'primary' ? 'primary' : stat.color === 'accent-gold' ? 'accent-gold' : stat.color === 'accent-red' ? 'accent-red' : 'white'} tracking-tighter tabular-nums`}>
+                {stat.val}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
 };
 
-export default GovernmentBanks; 
+export default GovernmentBanks;
+ 

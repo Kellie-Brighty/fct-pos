@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Select } from "antd";
+import BoldModal from "./BoldModal";
 
 interface TransactionReport {
   id: string;
@@ -13,6 +15,16 @@ interface TransactionReport {
 const BankTransactionReports = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<string>("last30");
   const [isGeneratingReport, setIsGeneratingReport] = useState<boolean>(false);
+  const [alertConfig, setAlertConfig] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info" as "info" | "success" | "warning" | "error",
+  });
+
+  const showAlert = (title: string, message: string, type: "info" | "success" | "warning" | "error" = "info") => {
+    setAlertConfig({ isOpen: true, title, message, type });
+  };
 
   // Sample data for demonstration
   const reports: TransactionReport[] = [
@@ -66,232 +78,124 @@ const BankTransactionReports = () => {
     // Simulate report generation
     setTimeout(() => {
       setIsGeneratingReport(false);
-      alert(
-        "Report generation initiated. You will be notified when it's ready."
+      showAlert(
+        "Registry Initialized",
+        "The requested analytical manifest is being synthesized. You will be notified once the secure download link is generated.",
+        "success"
       );
     }, 1500);
   };
 
-  // Mobile card for responsive design
-  const MobileReportCard = ({ report }: { report: TransactionReport }) => {
-    return (
-      <div className="bg-white p-4 rounded-lg shadow-sm mb-3 border-l-4 border-primary">
-        <div className="flex justify-between items-center mb-2">
-          <span className="font-medium text-primary">{report.period}</span>
-          <span
-            className={`px-2 py-1 text-xs font-medium rounded-full ${
-              report.status === "Generated"
-                ? "bg-green-100 text-green-800"
-                : report.status === "Processing"
-                ? "bg-blue-100 text-blue-800"
-                : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {report.status}
-          </span>
-        </div>
-        <div className="grid grid-cols-2 gap-2 text-sm mb-3">
-          <div>
-            <p className="text-gray-500">Report ID</p>
-            <p className="font-medium">{report.id}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Generated</p>
-            <p className="font-medium">{report.generatedDate}</p>
-          </div>
-          <div>
-            <p className="text-gray-500">Transactions</p>
-            <p className="font-medium">
-              {report.totalTransactions.toLocaleString()}
-            </p>
-          </div>
-          <div>
-            <p className="text-gray-500">Total Amount</p>
-            <p className="font-medium">{formatCurrency(report.totalAmount)}</p>
-          </div>
-        </div>
-        {report.status === "Generated" && report.downloadUrl && (
-          <div className="flex justify-end">
-            <button className="text-primary hover:text-primary-dark text-sm font-medium flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-1"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              Download
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  };
 
   return (
     <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">
-          Transaction Reports
+      <div className="mb-10">
+        <h1 className="text-3xl font-black text-white mb-2 font-heading tracking-tighter text-glow">
+          Institutional <span className="text-primary-light">Analytics Registry</span>
         </h1>
-        <p className="text-gray-600">
-          Generate and download transaction reports for tax reconciliation
+        <p className="text-white/80 text-[10px] font-black uppercase tracking-[0.25em]">
+          Computational Synthesis • Sequential Manifest Generation • Fiscal Analysis
         </p>
       </div>
 
       {/* Report Generation Form */}
-      <div className="bg-white p-4 md:p-6 rounded-lg shadow-md mb-6">
-        <h2 className="text-lg font-medium text-primary mb-4">
-          Generate New Report
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-8 md:p-12 mb-10 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#006D3508,transparent)] pointer-events-none"></div>
+        <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-10">
+          Initialize Registry Generation
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <div>
-            <label
-              htmlFor="reportPeriod"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Report Period
-            </label>
-            <select
-              id="reportPeriod"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div className="space-y-4">
+            <label className="block text-[10px] font-black text-white/80 uppercase tracking-widest pl-1">Target Period</label>
+            <Select
+              className="w-full text-white"
+              popupClassName="ant-select-dropdown"
               value={selectedPeriod}
-              onChange={(e) => setSelectedPeriod(e.target.value)}
-            >
-              <option value="last30">Last 30 Days</option>
-              <option value="lastMonth">Last Month</option>
-              <option value="custom">Custom Range</option>
-              <option value="jan2023">January 2023</option>
-              <option value="feb2023">February 2023</option>
-              <option value="mar2023">March 2023</option>
-              <option value="apr2023">April 2023</option>
-            </select>
+              onChange={(value) => setSelectedPeriod(value)}
+              options={[
+                { value: "last30", label: "Last 30 Days" },
+                { value: "lastMonth", label: "Last Month" },
+                { value: "custom", label: "Custom Range" },
+                { value: "jan2023", label: "January 2023" },
+                { value: "feb2023", label: "February 2023" },
+                { value: "mar2023", label: "March 2023" },
+                { value: "apr2023", label: "April 2023" },
+              ]}
+            />
           </div>
 
-          <div>
-            <label
-              htmlFor="reportType"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Report Type
-            </label>
-            <select
-              id="reportType"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-            >
-              <option value="summary">Summary Report</option>
-              <option value="detailed">Detailed Report</option>
-              <option value="tax">Tax Report</option>
-              <option value="agent">Agent Performance</option>
-            </select>
+          <div className="space-y-4">
+            <label className="block text-[10px] font-black text-white/80 uppercase tracking-widest pl-1">Registry Type</label>
+            <Select
+              className="w-full text-white"
+              popupClassName="ant-select-dropdown"
+              defaultValue="summary"
+              options={[
+                { value: "summary", label: "Summary Protocol" },
+                { value: "detailed", label: "Detailed Analysis" },
+                { value: "tax", label: "Taxation Ledger" },
+                { value: "agent", label: "Agent Deployment" },
+              ]}
+            />
           </div>
 
-          <div>
-            <label
-              htmlFor="reportFormat"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Format
-            </label>
-            <select
-              id="reportFormat"
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-            >
-              <option value="pdf">PDF</option>
-              <option value="excel">Excel</option>
-              <option value="csv">CSV</option>
-            </select>
+          <div className="space-y-4">
+            <label className="block text-[10px] font-black text-white/80 uppercase tracking-widest pl-1">Output Cipher</label>
+            <Select
+              className="w-full text-white"
+              popupClassName="ant-select-dropdown"
+              defaultValue="pdf"
+              options={[
+                { value: "pdf", label: "PDF Protocol" },
+                { value: "excel", label: "XLS Manifest" },
+                { value: "csv", label: "CSV Sequence" },
+              ]}
+            />
           </div>
         </div>
 
         {selectedPeriod === "custom" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label
-                htmlFor="startDate"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Start Date
-              </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 animate-in slide-in-from-top-4 duration-500">
+            <div className="space-y-4">
+              <label className="block text-[10px] font-black text-white/80 uppercase tracking-widest pl-1">Temporal Start</label>
               <input
                 type="date"
-                id="startDate"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
               />
             </div>
-            <div>
-              <label
-                htmlFor="endDate"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                End Date
-              </label>
+            <div className="space-y-4">
+              <label className="block text-[10px] font-black text-white/80 uppercase tracking-widest pl-1">Temporal End</label>
               <input
                 type="date"
-                id="endDate"
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-bold"
               />
             </div>
           </div>
         )}
 
-        <div className="flex justify-end">
+        <div className="flex justify-end pt-4">
           <button
             onClick={handleGenerateReport}
             disabled={isGeneratingReport}
-            className={`bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark transition flex items-center ${
-              isGeneratingReport ? "opacity-70 cursor-not-allowed" : ""
+            className={`btn-primary px-10 py-4 text-[10px] tracking-widest uppercase font-black transition-all flex items-center ${
+              isGeneratingReport ? "opacity-70 cursor-not-allowed scale-95" : "hover:scale-105"
             }`}
           >
             {isGeneratingReport ? (
               <>
-                <svg
-                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
+                <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Generating...
+                Processing Protocol...
               </>
             ) : (
               <>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Generate Report
+                Generate Repository Manifest
               </>
             )}
           </button>
@@ -299,93 +203,57 @@ const BankTransactionReports = () => {
       </div>
 
       {/* Report History */}
-      <h2 className="text-lg font-medium text-primary mb-4">Report History</h2>
-
-      {/* Mobile view */}
-      <div className="block md:hidden">
-        {reports.map((report) => (
-          <MobileReportCard key={report.id} report={report} />
-        ))}
-      </div>
+      <h2 className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-6 flex items-center">
+        <span className="w-8 h-px bg-white/10 mr-4"></span>
+        Manifest Archive History
+      </h2>
 
       {/* Desktop view */}
-      <div className="hidden md:block bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Report ID
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Period
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Generated Date
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Transactions
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total Amount
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+      <div className="hidden md:block glass-card border-white/5 bg-white/2 rounded-[2rem] overflow-hidden shadow-2xl">
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="min-w-full divide-y divide-white/5">
+            <thead>
+              <tr className="bg-white/2">
+                {["Report ID", "Period", "Generated", "Sequence Count", "Asset Sum", "Status", "Actions"].map((header) => (
+                  <th key={header} className="px-6 py-5 text-left text-[10px] font-black text-white/80 uppercase tracking-widest">
+                    {header}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {reports.map((report) => (
-                <tr key={report.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-primary">
+                <tr key={report.id} className="hover:bg-white/5 transition-colors group">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-black text-primary-light uppercase tracking-widest">
                     {report.id}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {report.period}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-bold text-white uppercase opacity-60">
                     {report.generatedDate}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {report.totalTransactions.toLocaleString()}
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tight">
+                    {report.totalTransactions.toLocaleString()} TX
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tight">
                     {formatCurrency(report.totalAmount)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        report.status === "Generated"
-                          ? "bg-green-100 text-green-800"
-                          : report.status === "Processing"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-gray-100 text-gray-800"
-                      }`}
-                    >
+                  <td className="px-6 py-5 whitespace-nowrap">
+                    <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${
+                      report.status === 'Generated' ? 'bg-primary/10 text-primary-light border border-primary/20' :
+                      'bg-blue/10 text-blue border border-blue/20'
+                    }`}>
                       {report.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-6 py-5 whitespace-nowrap text-xs">
                     {report.status === "Generated" && report.downloadUrl && (
-                      <button className="text-primary hover:text-primary-dark font-medium flex items-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                          />
+                      <button className="text-[10px] font-black text-white/80 hover:text-primary-light uppercase tracking-widest flex items-center transition-colors group/btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 group-hover/btn:-translate-y-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                         </svg>
-                        Download
+                        Archive Asset
                       </button>
                     )}
                   </td>
@@ -397,39 +265,29 @@ const BankTransactionReports = () => {
       </div>
 
       {/* Report Tips */}
-      <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
-        <h3 className="font-medium mb-2 flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
+      <div className="mt-10 glass-card border-white/5 bg-white/1 p-8 rounded-3xl relative overflow-hidden group">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_0%_0%,#006D3508,transparent)] pointer-events-none"></div>
+        <h3 className="text-[10px] font-black text-white/80 uppercase tracking-[0.2em] mb-4 flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-3 text-primary-light" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Report Generation Tips
+          Generation Protocol Insights
         </h3>
-        <ul className="list-disc list-inside space-y-1 ml-2">
-          <li>
-            Reports are typically generated within 5-10 minutes depending on the
-            size
-          </li>
-          <li>
-            For large date ranges, consider using the "Summary Report" option
-          </li>
-          <li>
-            All reports include transaction IDs that can be used for
-            reconciliation
-          </li>
-          <li>Reports remain available for download for 30 days</li>
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 text-[10px] font-black text-white/80 uppercase tracking-widest">
+          <li className="flex items-start"><span className="w-1.5 h-1.5 bg-primary/40 rounded-full mt-1 mr-3 flex-shrink-0"></span>Registry synthesis latency: 5-10 Minutes (Density Dependent)</li>
+          <li className="flex items-start"><span className="w-1.5 h-1.5 bg-primary/40 rounded-full mt-1 mr-3 flex-shrink-0"></span>High-volume temporal ranges suggest "Summary Protocol" usage</li>
+          <li className="flex items-start"><span className="w-1.5 h-1.5 bg-primary/40 rounded-full mt-1 mr-3 flex-shrink-0"></span>Sequential Transaction IDs enforced for baseline reconciliation</li>
+          <li className="flex items-start"><span className="w-1.5 h-1.5 bg-primary/40 rounded-full mt-1 mr-3 flex-shrink-0"></span>Manifest persistence: 30-Day Archive (Automatic Purge)</li>
         </ul>
       </div>
+
+      <BoldModal
+        isOpen={alertConfig.isOpen}
+        onClose={() => setAlertConfig({ ...alertConfig, isOpen: false })}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </div>
   );
 };

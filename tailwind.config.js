@@ -5,28 +5,38 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#00A651", // Emerald green from Abuja logo
-          light: "#2AB770",
-          dark: "#008E45",
+          DEFAULT: "#006D35", // Deep Abuja Emerald
+          light: "#00A651",
+          dark: "#004B23",
+          high: "#00FF7F",
         },
         secondary: {
-          DEFAULT: "#2E3192", // Navy blue/purple from Abuja logo
-          light: "#4145A8",
-          dark: "#1C1F72",
+          DEFAULT: "#0B1120", // Deep Space Navy
+          light: "#1A2235",
+          dark: "#05080F",
         },
         accent: {
-          gold: "#FFCC00", // Bright yellow from Abuja logo
-          blue: "#77B5FE", // Light blue from Abuja logo
-          red: "#FF5A5A", // Keep this for error states
+          gold: "#F0B323", // Sovereign Gold
+          "gold-light": "#FFCC00",
+          blue: "#77B5FE",
+          red: "#FF5A5A",
         },
         gray: {
           light: "#F7F9FC",
-          DEFAULT: "#333333", // Charcoal gray
+          dark: "#0B1120",
+          DEFAULT: "#333333",
         },
       },
       fontFamily: {
-        sans: ["Open Sans", "sans-serif"],
+        sans: ["Inter", "Open Sans", "sans-serif"],
         heading: ["Livvic", "sans-serif"],
+      },
+      backgroundImage: {
+        "glass-gradient": "linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))",
+        "prime-gradient": "linear-gradient(135deg, #006D35 0%, #004B23 100%)",
+      },
+      backdropBlur: {
+        xs: "2px",
       },
     },
   },

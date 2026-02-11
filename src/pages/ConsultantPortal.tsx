@@ -4,12 +4,13 @@ import ClientManagement from "../components/ClientManagement";
 import TaxAssessment from "../components/TaxAssessment";
 import ConsultantReports from "../components/ConsultantReports";
 import ConsultantSettings from "../components/ConsultantSettings";
+import GeospatialIntel from "../components/GeospatialIntel";
 import LogoutModal from "../components/LogoutModal";
 import Logo from "../components/Logo";
 
 const ConsultantPortal = () => {
   const [currentView, setCurrentView] = useState<
-    "dashboard" | "clients" | "assessment" | "reports" | "settings"
+    "dashboard" | "clients" | "assessment" | "reports" | "settings" | "geospatial"
   >("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -41,7 +42,7 @@ const ConsultantPortal = () => {
 
   // Helper function to handle menu item clicks
   const handleMenuClick = (
-    view: "dashboard" | "clients" | "assessment" | "reports" | "settings"
+    view: "dashboard" | "clients" | "assessment" | "reports" | "settings" | "geospatial"
   ) => {
     setCurrentView(view);
     // Close sidebar on mobile
@@ -51,19 +52,20 @@ const ConsultantPortal = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-light flex flex-col">
-      <div className="flex relative">
+    <div className="h-screen bg-secondary flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,#006D3508,transparent)] pointer-events-none"></div>
+      <div className="flex relative flex-1 overflow-hidden">
         {/* Sidebar */}
         <div
           ref={sidebarRef}
-          className={`bg-primary text-white w-64 fixed h-full z-20 transition-all duration-300 ease-in-out ${
+          className={`bg-secondary/40 backdrop-blur-2xl border-r border-white/5 text-white w-64 fixed lg:sticky lg:top-0 h-full lg:h-screen z-20 transition-all duration-300 ease-in-out ${
             sidebarOpen ? "left-0" : "-left-64"
-          } lg:left-0`}
+          } lg:left-0 lg:translate-x-0`}
         >
-          <div className="p-4 border-b border-primary-light">
-            <div className="flex items-center space-x-2">
+          <div className="p-6 border-b border-white/5">
+            <div className="flex items-center space-x-3">
               <Logo size="small" />
-              <h1 className="text-xl font-bold">Consultant Portal</h1>
+              <h1 className="text-sm font-black text-white font-heading uppercase tracking-widest text-glow">Portfolio Management</h1>
             </div>
           </div>
 
@@ -72,15 +74,15 @@ const ConsultantPortal = () => {
               <li>
                 <button
                   onClick={() => handleMenuClick("dashboard")}
-                  className={`w-full flex items-center px-4 py-3 ${
+                  className={`w-full flex items-center px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
                     currentView === "dashboard"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
+                      ? "bg-white/5 text-primary-light border-r-2 border-primary"
+                      : "text-white/80 hover:text-white hover:bg-white/2"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
+                    className="h-4 w-4 mr-4 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -92,21 +94,21 @@ const ConsultantPortal = () => {
                       d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                     />
                   </svg>
-                  Dashboard
+                  <span className="text-left">Dashboard</span>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleMenuClick("clients")}
-                  className={`w-full flex items-center px-4 py-3 ${
+                  className={`w-full flex items-center px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
                     currentView === "clients"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
+                      ? "bg-white/5 text-primary-light border-r-2 border-primary"
+                      : "text-white/80 hover:text-white hover:bg-white/2"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
+                    className="h-4 w-4 mr-4 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -118,21 +120,21 @@ const ConsultantPortal = () => {
                       d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                     />
                   </svg>
-                  Client Management
+                  <span className="text-left">Clients Portfolio</span>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleMenuClick("assessment")}
-                  className={`w-full flex items-center px-4 py-3 ${
+                  className={`w-full flex items-center px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
                     currentView === "assessment"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
+                      ? "bg-white/5 text-primary-light border-r-2 border-primary"
+                      : "text-white/80 hover:text-white hover:bg-white/2"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
+                    className="h-4 w-4 mr-4 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -144,21 +146,47 @@ const ConsultantPortal = () => {
                       d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
                     />
                   </svg>
-                  Tax Assessment
+                  <span className="text-left">Tax Evaluation</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => handleMenuClick("geospatial")}
+                  className={`w-full flex items-center px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
+                    currentView === "geospatial"
+                      ? "bg-white/5 text-primary-light border-r-2 border-primary"
+                      : "text-white/80 hover:text-white hover:bg-white/2"
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4 mr-4 shrink-0"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 20l-5.447-2.724A2 2 0 013 15.483V4.354l6 2.667 6-2.667 6 2.667v11.129a2 2 0 01-1.126 1.792L15 20l-6-2.667L3 20"
+                    />
+                  </svg>
+                  <span className="text-left">Geospatial Intel</span>
                 </button>
               </li>
               <li>
                 <button
                   onClick={() => handleMenuClick("reports")}
-                  className={`w-full flex items-center px-4 py-3 ${
+                  className={`w-full flex items-center px-6 py-4 text-xs font-bold uppercase tracking-widest transition-all ${
                     currentView === "reports"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
+                      ? "bg-white/5 text-primary-light border-r-2 border-primary"
+                      : "text-white/80 hover:text-white hover:bg-white/2"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
+                    className="h-4 w-4 mr-4 shrink-0"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -170,52 +198,20 @@ const ConsultantPortal = () => {
                       d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     />
                   </svg>
-                  Reports & Analytics
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => handleMenuClick("settings")}
-                  className={`w-full flex items-center px-4 py-3 ${
-                    currentView === "settings"
-                      ? "bg-primary-light"
-                      : "hover:bg-primary-light"
-                  } transition`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 mr-3"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                    />
-                  </svg>
-                  Settings
+                  <span className="text-left">Fiscal Analytical Insights</span>
                 </button>
               </li>
             </ul>
           </nav>
 
-          <div className="absolute bottom-0 w-full p-4 border-t border-primary-light">
+          <div className="absolute bottom-0 w-full p-6 border-t border-white/5 bg-secondary/20">
             <button
               onClick={() => setShowLogoutModal(true)}
-              className="flex items-center text-white hover:text-accent-gold transition w-full"
+              className="flex items-center text-white/80 hover:text-white transition-all w-full text-xs font-bold uppercase tracking-widest group"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-3"
+                className="h-4 w-4 mr-4 group-hover:text-accent-red transition-colors"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -233,14 +229,14 @@ const ConsultantPortal = () => {
         </div>
 
         {/* Main Content */}
-        <div className="lg:ml-64 w-full">
+        <div className="flex-1 min-w-0 flex flex-col relative z-10 lg:ml-0 overflow-hidden">
           {/* Top Bar */}
-          <header className="bg-white shadow-sm w-full">
-            <div className="flex justify-between items-center px-4 md:px-6 py-3">
+          <header className="bg-secondary/40 backdrop-blur-2xl border-b border-white/5 w-full">
+            <div className="flex justify-between items-center px-6 md:px-10 py-4">
               <button
                 ref={menuButtonRef}
                 onClick={() => setSidebarOpen(!sidebarOpen)}
-                className="lg:hidden text-gray p-2 rounded-md hover:bg-gray-100 focus:outline-none"
+                className="lg:hidden text-white/80 p-2 rounded-xl hover:bg-white/5 transition-all"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -258,23 +254,29 @@ const ConsultantPortal = () => {
                 </svg>
               </button>
 
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-600">
-                  Tax Consultant - Abuja FCT
-                </span>
-                <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-medium">
-                  TC
+              <div className="flex items-center space-x-6">
+                <div className="hidden md:block text-right">
+                  <p className="text-[10px] font-black text-white/80 uppercase tracking-widest leading-none mb-1">Fiscal Consultant Identity</p>
+                  <p className="text-xs font-bold text-white uppercase tracking-wide">
+                    Jane Doe - Abuja FCT
+                  </p>
+                </div>
+                <div className="w-10 h-10 rounded-xl bg-prime-gradient p-px">
+                  <div className="w-full h-full bg-secondary rounded-[11px] flex items-center justify-center text-xs font-black text-primary-light">
+                    JD
+                  </div>
                 </div>
               </div>
             </div>
           </header>
 
           {/* Content */}
-          <main className="overflow-x-hidden">
+          <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 md:p-10 min-w-0 custom-scrollbar">
             {currentView === "dashboard" && <ConsultantDashboard />}
             {currentView === "clients" && <ClientManagement />}
             {currentView === "assessment" && <TaxAssessment />}
             {currentView === "reports" && <ConsultantReports />}
+            {currentView === "geospatial" && <GeospatialIntel />}
             {currentView === "settings" && <ConsultantSettings />}
           </main>
         </div>

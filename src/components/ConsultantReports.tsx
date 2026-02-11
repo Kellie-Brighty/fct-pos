@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Select } from "antd";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -35,9 +36,10 @@ const ConsultantReports = () => {
       {
         label: "Tax Revenue (NGN)",
         data: [25400000, 28700000, 32100000, 29800000, 31500000, 34200000],
-        backgroundColor: "rgba(29, 126, 80, 0.7)",
-        borderColor: "rgba(29, 126, 80, 1)",
-        borderWidth: 1,
+        backgroundColor: "rgba(0, 109, 53, 0.4)", // Primary Emerald
+        borderColor: "rgba(0, 109, 53, 1)",
+        borderWidth: 2,
+        borderRadius: 8,
       },
     ],
   };
@@ -46,25 +48,12 @@ const ConsultantReports = () => {
     labels: ["First Bank", "UBA", "GTBank", "Zenith", "Access", "Sterling"],
     datasets: [
       {
-        label: "Compliance Rate (%)",
+        label: "Compliance %",
         data: [96, 88, 92, 98, 85, 94],
-        backgroundColor: [
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(111, 30, 81, 0.7)",
-          "rgba(246, 156, 12, 0.7)",
-          "rgba(13, 71, 161, 0.7)",
-          "rgba(191, 54, 12, 0.7)",
-          "rgba(46, 125, 50, 0.7)",
-        ],
-        borderColor: [
-          "rgba(29, 126, 80, 1)",
-          "rgba(111, 30, 81, 1)",
-          "rgba(246, 156, 12, 1)",
-          "rgba(13, 71, 161, 1)",
-          "rgba(191, 54, 12, 1)",
-          "rgba(46, 125, 50, 1)",
-        ],
-        borderWidth: 1,
+        backgroundColor: "rgba(0, 109, 53, 0.4)",
+        borderColor: "rgba(0, 109, 53, 1)",
+        borderWidth: 2,
+        borderRadius: 8,
       },
     ],
   };
@@ -77,6 +66,17 @@ const ConsultantReports = () => {
         display: false,
       },
     },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: { color: "rgba(255, 255, 255, 0.05)" },
+        ticks: { color: "rgba(255, 255, 255, 0.4)", font: { family: "Inter", weight: "bold", size: 10 } }
+      },
+      x: {
+        grid: { display: false },
+        ticks: { color: "rgba(255, 255, 255, 0.4)", font: { family: "Inter", weight: "bold", size: 10 } }
+      }
+    }
   };
 
   // Format currency
@@ -143,173 +143,105 @@ const ConsultantReports = () => {
   };
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">
-          Reports & Analytics
-        </h1>
-        <p className="text-gray-600">
-          Generate and analyze tax collection reports
-        </p>
+    <div className="space-y-8 md:space-y-12 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 group">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1 uppercase">
+            COMPLIANCE <span className="text-primary-light">REPORTS</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Performance Analysis & Client Reporting System
+            </p>
+          </div>
+        </div>
+        
+        <div className="mt-8 md:mt-0 flex flex-wrap gap-4">
+          <div className="flex items-center space-x-2 glass-card bg-white/2 border-white/5 p-1 rounded-2xl">
+            <Select
+              className="w-48 text-white"
+              popupClassName="ant-select-dropdown"
+              value={period}
+              bordered={false}
+              onChange={(value) => setPeriod(value)}
+              options={[
+                { value: "monthly", label: "Monthly Cycle" },
+                { value: "quarterly", label: "Quarterly Cycle" },
+                { value: "annual", label: "Annual Cycle" },
+              ]}
+            />
+          </div>
+
+          <button className="btn-primary px-10 py-4 text-[10px] tracking-widest uppercase font-black">
+            Export Data
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-primary">
-          <p className="text-gray-500 text-sm mb-1">Total Revenue (Q1)</p>
-          <p className="text-2xl font-bold text-gray-800">₦86.2M</p>
-          <div className="flex items-center text-xs text-green-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-            <span>+8.4% from Q4 2022</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+          { label: "Total Revenue", val: "₦86.2M", gain: "+8.4% vs last month", color: "primary" },
+          { label: "Reports Generated", val: "47", gain: "Up to date", color: "white/20" },
+          { label: "Compliance Rate", val: "92.8%", gain: "Stable", color: "primary" },
+          { label: "Active Connections", val: "100%", gain: "All Active", color: "primary" },
+        ].map((m) => (
+          <div key={m.label} className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 transition-all group rounded-[2.5rem] relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/2 blur-2xl rounded-full group-hover:bg-white/5 transition-all"></div>
+            <div className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-4">{m.label}</div>
+            <div className="text-3xl font-black text-white tracking-tighter tabular-nums mb-6">{m.val}</div>
+            <div className={`text-[9px] font-black flex items-center tracking-widest uppercase ${m.color === 'primary' ? 'text-primary' : 'text-white/80'}`}>
+              <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              {m.gain}
+            </div>
           </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-accent-gold">
-          <p className="text-gray-500 text-sm mb-1">Reports Generated</p>
-          <p className="text-2xl font-bold text-gray-800">47</p>
-          <div className="flex items-center text-xs text-gray-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-              />
-            </svg>
-            <span>Last report: 2 days ago</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-secondary-light">
-          <p className="text-gray-500 text-sm mb-1">Average Compliance</p>
-          <p className="text-2xl font-bold text-gray-800">92.8%</p>
-          <div className="flex items-center text-xs text-green-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-            <span>+1.2% from previous period</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-purple-500">
-          <p className="text-gray-500 text-sm mb-1">Active Banks</p>
-          <p className="text-2xl font-bold text-gray-800">12</p>
-          <div className="flex items-center text-xs text-gray-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-              />
-            </svg>
-            <span>100% submission rate</span>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Report Generator Section */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <h2 className="text-lg font-medium text-primary mb-4">
-          Generate New Report
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-10 overflow-hidden">
+        <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-8">
+          Report Settings
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <label
-              htmlFor="reportType"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Report Type
+            <label htmlFor="reportType" className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-3 ml-1">
+              Dataset Profile
             </label>
-            <select
-              id="reportType"
+            <Select
+              className="w-full text-white"
+              popupClassName="ant-select-dropdown"
               value={reportType}
-              onChange={(e) =>
-                setReportType(
-                  e.target.value as "summary" | "detailed" | "compliance"
-                )
-              }
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-            >
-              <option value="summary">Summary Report</option>
-              <option value="detailed">Detailed Breakdown</option>
-              <option value="compliance">Compliance Report</option>
-            </select>
+              onChange={(value) => setReportType(value)}
+              options={[
+                { value: "summary", label: "Market Summary" },
+                { value: "detailed", label: "Detailed Breakdown" },
+                { value: "compliance", label: "Compliance Audit" },
+              ]}
+            />
           </div>
 
           <div>
-            <label
-              htmlFor="period"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Time Period
+            <label htmlFor="period" className="block text-[10px] font-black text-white/80 uppercase tracking-widest mb-3 ml-1">
+              Temporal Scope
             </label>
-            <select
-              id="period"
+            <Select
+              className="w-full text-white"
+              popupClassName="ant-select-dropdown"
               value={period}
-              onChange={(e) =>
-                setPeriod(e.target.value as "monthly" | "quarterly" | "annual")
-              }
-              className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
-            >
-              <option value="monthly">Monthly</option>
-              <option value="quarterly">Quarterly</option>
-              <option value="annual">Annual</option>
-            </select>
+              onChange={(value) => setPeriod(value)}
+              options={[
+                { value: "monthly", label: "Monthly Cycle" },
+                { value: "quarterly", label: "Quarterly Cycle" },
+                { value: "annual", label: "Annual Cycle" },
+              ]}
+            />
           </div>
 
           <div className="flex items-end">
-            <button className="w-full bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark transition flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+            <button className="btn-primary w-full py-3 text-[10px] tracking-widest uppercase font-black h-[46px]">
               Generate Report
             </button>
           </div>
@@ -317,86 +249,82 @@ const ConsultantReports = () => {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-lg font-medium text-primary mb-4">
-            Revenue Trend (Q1 2023)
-          </h2>
-          <div className="h-64">
-            <Bar data={summaryData} options={chartOptions} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {[
+          { title: "Revenue Growth (Q1)", subtitle: "Monthly Collection Trends", data: summaryData },
+          { title: "Bank Compliance", subtitle: "Compliance Rate Analysis", data: complianceData },
+        ].map((chart, i) => (
+          <div key={i} className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-10">
+            <div className="mb-8">
+              <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+                {chart.title}
+              </h2>
+              <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">{chart.subtitle}</p>
+            </div>
+            <div className="h-72 bg-white/2 rounded-3xl border border-white/5 p-6 relative overflow-hidden group/chart">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,109,53,0.05),transparent)] pointer-events-none transition-all duration-700 group-hover/chart:opacity-50"></div>
+              <Bar 
+                data={chart.data} 
+                options={{
+                  ...chartOptions,
+                  scales: {
+                    ...chartOptions.scales,
+                    y: {
+                      ...chartOptions.scales.y,
+                      grid: { color: "rgba(255, 255, 255, 0.03)" },
+                      ticks: { ...chartOptions.scales.y.ticks, color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "900" } }
+                    },
+                    x: {
+                      ...chartOptions.scales.x,
+                      ticks: { ...chartOptions.scales.x.ticks, color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "900" } }
+                    }
+                  }
+                } as any} 
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-lg font-medium text-primary mb-4">
-            Bank Compliance Rates
-          </h2>
-          <div className="h-64">
-            <Bar data={complianceData} options={chartOptions} />
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* Recent Reports Table */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-6">
-        <div className="p-4 border-b border-gray-200">
-          <h2 className="text-lg font-medium text-primary">Recent Reports</h2>
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] overflow-hidden">
+        <div className="p-10 border-b border-white/5">
+          <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em]">
+            Archived Reports
+          </h2>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Report Name
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Type
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Created
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Banks
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total Amount
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+          <table className="min-w-full divide-y divide-white/5">
+            <thead>
+              <tr className="bg-white/2">
+                {["Report ID", "Report Name", "Banks", "Total Amount", "Status"].map((h) => (
+                  <th key={h} className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {recentReports.map((report) => (
-                <tr key={report.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-primary">
+                <tr key={report.id} className="hover:bg-white/5 transition-all group">
+                  <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-primary-light tracking-widest">
                     {report.id}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {report.name}
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <div className="text-xs font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest mb-1">{report.name}</div>
+                    <div className="text-[9px] font-black text-white/80 uppercase tracking-widest">{report.type} • {formatDate(report.createdAt)}</div>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {report.type}
+                  <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                    {report.banks} <span className="text-[10px] opacity-40">Active</span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {formatDate(report.createdAt)}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {report.banks}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-white tracking-tighter tabular-nums">
                     {formatCurrency(report.totalAmount)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
-                    <button className="text-primary hover:text-primary-dark font-medium mr-3">
-                      View
-                    </button>
-                    <button className="text-gray-600 hover:text-gray-900 font-medium">
-                      Download
-                    </button>
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <div className="flex space-x-6">
+                      <button className="text-[10px] font-black text-primary-light hover:text-white uppercase tracking-widest transition-colors">Inspect</button>
+                      <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-colors">Export</button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -406,112 +334,29 @@ const ConsultantReports = () => {
       </div>
 
       {/* Export Options */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-lg font-medium text-primary mb-4">
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-12 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32 transition-all group-hover:bg-primary/10"></div>
+        <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-10">
           Export Options
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <button className="flex items-center justify-between p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition">
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-green-600 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+          {[
+            { label: "Excel XLSX", color: "primary", icon: "table_chart" },
+            { label: "Digital PDF", color: "accent-red", icon: "picture_as_pdf" },
+            { label: "Data CSV", color: "accent-blue", icon: "code" },
+          ].map((option) => (
+            <button key={option.label} className="flex items-center justify-between p-8 bg-white/2 border border-white/5 rounded-3xl hover:bg-white/5 hover:border-white/10 transition-all group">
+              <div className="flex items-center">
+                <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mr-6 group-hover:scale-110 transition-transform`}>
+                  <div className={`w-2 h-2 rounded-full ${option.color === 'primary' ? 'bg-primary' : (option.color === 'accent-red' ? 'bg-accent-red' : 'bg-accent-blue')}`}></div>
+                </div>
+                <span className="text-[10px] font-black text-white uppercase tracking-widest opacity-60 group-hover:opacity-100 transition-opacity">{option.label}</span>
+              </div>
+              <svg className="w-4 h-4 text-white/10 group-hover:text-white/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <span className="text-sm font-medium">Excel</span>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-          </button>
-
-          <button className="flex items-center justify-between p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition">
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-red-600 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
-              <span className="text-sm font-medium">PDF</span>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-          </button>
-
-          <button className="flex items-center justify-between p-3 border border-gray-300 rounded-md hover:bg-gray-50 transition">
-            <div className="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-blue-600 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"
-                />
-              </svg>
-              <span className="text-sm font-medium">CSV</span>
-            </div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-          </button>
+            </button>
+          ))}
         </div>
       </div>
     </div>

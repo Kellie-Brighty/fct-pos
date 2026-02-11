@@ -90,23 +90,11 @@ const ConsultantDashboard = () => {
       {
         label: "Compliance Rate (%)",
         data: [96, 88, 92, 98, 85, 94],
-        backgroundColor: [
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(29, 126, 80, 0.7)",
-          "rgba(29, 126, 80, 0.7)",
-        ],
-        borderColor: [
-          "rgba(29, 126, 80, 1)",
-          "rgba(29, 126, 80, 1)",
-          "rgba(29, 126, 80, 1)",
-          "rgba(29, 126, 80, 1)",
-          "rgba(29, 126, 80, 1)",
-          "rgba(29, 126, 80, 1)",
-        ],
-        borderWidth: 1,
+        backgroundColor: "rgba(0, 109, 53, 0.4)", // Primary Emerald
+        borderColor: "rgba(0, 109, 53, 1)",
+        borderWidth: 2,
+        borderRadius: 8,
+        hoverBackgroundColor: "rgba(0, 109, 53, 0.6)",
       },
     ],
   };
@@ -123,9 +111,31 @@ const ConsultantDashboard = () => {
       y: {
         beginAtZero: true,
         max: 100,
+        grid: {
+          color: "rgba(255, 255, 255, 0.05)",
+        },
         ticks: {
+          color: "rgba(255, 255, 255, 0.4)",
+          font: {
+            family: "Inter",
+            weight: "bold",
+            size: 10,
+          },
           callback: function (value: any) {
             return value + "%";
+          },
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: "rgba(255, 255, 255, 0.4)",
+          font: {
+            family: "Inter",
+            weight: "bold",
+            size: 10,
           },
         },
       },
@@ -137,171 +147,111 @@ const ConsultantDashboard = () => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
       currency: "NGN",
+      maximumFractionDigits: 0,
     }).format(amount);
   };
 
   return (
-    <div className="p-4 md:p-6">
-      <div className="mb-6">
-        <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">
-          Consultant Dashboard
-        </h1>
-        <p className="text-gray-600">
-          Overview of your clients, declarations, and performance metrics
-        </p>
+    <div className="space-y-8 md:space-y-12 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div>
+          <p className="text-[10px] font-black text-primary-high uppercase tracking-[0.4em] mb-3">
+            Portfolio Command
+          </p>
+          <h2 className="text-4xl font-black text-white font-heading tracking-tighter text-glow">
+            Advisory Hub <span className="text-primary-light">Engine</span>
+          </h2>
+        </div>
+        
+        <div className="mt-8 md:mt-0 glass-card bg-white/2 border-white/5 p-1.5 flex shadow-2xl rounded-2xl">
+          {["weekly", "monthly", "quarterly"].map((p) => (
+            <button
+              key={p}
+              className={`px-8 py-3 text-[10px] font-black uppercase tracking-[0.2em] rounded-xl transition-all duration-500 ${
+                period === p
+                  ? "bg-primary text-white shadow-2xl shadow-primary/40 scale-105"
+                  : "text-white/80 hover:text-white/80"
+              }`}
+              onClick={() => setPeriod(p as any)}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-primary">
-          <p className="text-gray-500 text-sm mb-1">Assigned Banks</p>
-          <p className="text-2xl font-bold text-gray-800">12</p>
-          <div className="flex items-center text-xs text-green-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-            <span>+2 new this month</span>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+          { label: "Assigned Banks", val: "12", gain: "+2 New", color: "primary" },
+          { label: "Pending Reviews", val: "08", gain: "3 Urgent", color: "accent-red" },
+          { label: "Total Revenue", val: "₦158.3M", gain: "+12.4% vs last month", color: "primary" },
+          { label: "Compliance Rate", val: "92%", gain: "+3% Improvement", color: "primary" },
+        ].map((m) => (
+          <div key={m.label} className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 transition-all group rounded-[2.5rem] relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/2 blur-2xl rounded-full group-hover:bg-white/5 transition-all"></div>
+            <div className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-4">{m.label}</div>
+            <div className="text-3xl font-black text-white tracking-tighter tabular-nums mb-6">{m.val}</div>
+            <div className={`text-[9px] font-black flex items-center tracking-widest uppercase ${m.color === 'primary' ? 'text-primary' : 'text-accent-red'}`}>
+              <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              {m.gain}
+            </div>
           </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-purple-500">
-          <p className="text-gray-500 text-sm mb-1">Pending Reviews</p>
-          <p className="text-2xl font-bold text-gray-800">8</p>
-          <div className="flex items-center text-xs text-purple-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            <span>3 need urgent attention</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-accent-gold">
-          <p className="text-gray-500 text-sm mb-1">Total Tax Revenue</p>
-          <p className="text-2xl font-bold text-gray-800">₦158.3M</p>
-          <div className="flex items-center text-xs text-green-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-            <span>+12.4% from last month</span>
-          </div>
-        </div>
-
-        <div className="bg-white p-4 rounded-lg shadow-md border-t-4 border-secondary-light">
-          <p className="text-gray-500 text-sm mb-1">Compliance Rate</p>
-          <p className="text-2xl font-bold text-gray-800">92%</p>
-          <div className="flex items-center text-xs text-green-600 mt-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 10l7-7m0 0l7 7m-7-7v18"
-              />
-            </svg>
-            <span>+3% from last quarter</span>
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        {/* Pending Declarations */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-4">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-medium text-primary">
-              Pending Declarations
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Priority Reviews */}
+        <div className="lg:col-span-2 glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] overflow-hidden">
+          <div className="p-10 border-b border-white/5 flex justify-between items-center">
+            <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em]">
+              Urgent Reviews
             </h2>
-            <a
-              href="#"
-              className="text-primary hover:text-primary-dark text-sm font-medium"
-            >
-              View All
-            </a>
+            <button className="text-[10px] font-black text-primary-light hover:text-white uppercase tracking-widest transition-colors border border-primary/10 px-4 py-2 rounded-xl bg-primary/5">
+              Review All
+            </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    ID
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Bank
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Period
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
+            <table className="min-w-full divide-y divide-white/5">
+              <thead>
+                <tr className="bg-white/2">
+                  {["Declaration ID", "Bank Name", "Total Amount", "Status", "Action"].map((h) => (
+                    <th key={h} className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em]">
+                      {h}
+                    </th>
+                  ))}
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-white/5">
                 {pendingDeclarations.map((declaration) => (
-                  <tr key={declaration.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-primary">
+                  <tr key={declaration.id} className="hover:bg-white/5 transition-all group">
+                    <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-primary-light tracking-widest">
                       {declaration.id}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                      {declaration.bank}
+                    <td className="px-10 py-6 whitespace-nowrap">
+                      <div className="text-xs font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest mb-1">{declaration.bank}</div>
+                      <div className="text-[9px] font-black text-white/80 uppercase tracking-widest">{declaration.period}</div>
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                      {declaration.period}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
+                    <td className="px-10 py-6 whitespace-nowrap text-xs font-black text-white tracking-tighter tabular-nums">
                       {formatCurrency(declaration.amount)}
                     </td>
-                    <td className="px-4 py-3 whitespace-nowrap">
+                    <td className="px-10 py-6 whitespace-nowrap">
                       <span
-                        className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        className={`px-4 py-1 text-[8px] font-black uppercase tracking-widest rounded-full border shadow-[0_0_15px_rgba(0,0,0,0.1)] ${
                           declaration.status === "Pending Review"
-                            ? "bg-blue-100 text-blue-800"
-                            : "bg-yellow-100 text-yellow-800"
+                            ? "bg-accent-blue/10 text-accent-blue border-accent-blue/20"
+                            : "bg-accent-gold/10 text-accent-gold border-accent-gold/20"
                         }`}
                       >
                         {declaration.status}
                       </span>
+                    </td>
+                    <td className="px-10 py-6 whitespace-nowrap">
+                      <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all">
+                        Review
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -310,37 +260,25 @@ const ConsultantDashboard = () => {
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-lg font-medium text-primary mb-4">
-            Recent Activity
-          </h2>
-          <div className="space-y-4">
+        {/* Protocol Log */}
+        <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] flex flex-col overflow-hidden">
+          <div className="p-10 border-b border-white/5">
+            <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em]">
+              Activity History
+            </h2>
+          </div>
+          <div className="p-10 space-y-8 flex-1">
             {recentActivities.map((activity) => (
-              <div
-                key={activity.id}
-                className="flex items-start border-b pb-3 last:border-0 last:pb-0"
-              >
-                <div className="bg-primary-light p-2 rounded-full mr-3">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4 text-primary"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+              <div key={activity.id} className="flex items-start group">
+                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mr-6 group-hover:bg-primary/20 transition-all shadow-inner">
+                  <div className="w-2 h-2 rounded-full bg-primary-light animate-pulse"></div>
                 </div>
-                <div>
-                  <p className="font-medium text-sm">{activity.action}</p>
-                  <p className="text-gray-600 text-xs">{activity.bank}</p>
-                  <p className="text-gray-400 text-xs">{activity.time}</p>
+                <div className="flex-1">
+                  <div className="text-[11px] font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest mb-1">{activity.action}</div>
+                  <div className="text-[9px] font-black text-white/80 uppercase tracking-widest">{activity.bank}</div>
+                </div>
+                <div className="text-[8px] font-black text-white/10 uppercase tracking-[0.2em] whitespace-nowrap ml-4 pt-1">
+                  {activity.time}
                 </div>
               </div>
             ))}
@@ -348,143 +286,87 @@ const ConsultantDashboard = () => {
         </div>
       </div>
 
-      {/* Compliance Chart */}
-      <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-          <h2 className="text-lg font-medium text-primary mb-2 md:mb-0">
-            Client Compliance Rate
-          </h2>
-          <div className="inline-flex rounded-md shadow-sm">
-            <button
-              onClick={() => setPeriod("weekly")}
-              className={`px-3 py-1 text-sm rounded-l-md ${
-                period === "weekly"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              Weekly
-            </button>
-            <button
-              onClick={() => setPeriod("monthly")}
-              className={`px-3 py-1 text-sm ${
-                period === "monthly"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border-t border-b border-gray-300`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setPeriod("quarterly")}
-              className={`px-3 py-1 text-sm rounded-r-md ${
-                period === "quarterly"
-                  ? "bg-primary text-white"
-                  : "bg-white text-gray-700 hover:bg-gray-50"
-              } border border-gray-300`}
-            >
-              Quarterly
-            </button>
+      {/* Client Compliance Matrix */}
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
+          <div>
+            <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+              Client Compliance Matrix
+            </h2>
+            <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">Institutional Integrity Calibration</p>
+          </div>
+          <div className="flex items-center space-x-6">
+            <div className="flex items-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary mr-3 shadow-[0_0_10px_rgba(0,109,53,1)]"></div>
+              <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Active Rate</span>
+            </div>
           </div>
         </div>
-        <div className="h-64">
-          <Bar data={complianceData} options={chartOptions} />
+        <div className="h-80 bg-white/2 rounded-[2rem] border border-white/5 p-8 relative overflow-hidden group/chart cursor-crosshair">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,109,53,0.05),transparent)] pointer-events-none transition-all duration-700 group-hover/chart:opacity-50"></div>
+          <Bar 
+            data={complianceData} 
+            options={{
+              ...chartOptions,
+              scales: {
+                ...chartOptions.scales,
+                y: {
+                  ...chartOptions.scales.y,
+                  grid: { color: "rgba(255, 255, 255, 0.03)" },
+                  ticks: { ...chartOptions.scales.y.ticks, color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "900" } }
+                },
+                x: {
+                  ...chartOptions.scales.x,
+                  ticks: { ...chartOptions.scales.x.ticks, color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "900" } }
+                }
+              },
+              plugins: {
+                ...chartOptions.plugins,
+                tooltip: {
+                  backgroundColor: "rgba(11, 17, 32, 0.95)",
+                  titleFont: { family: "Inter", weight: "bold", size: 12 },
+                  bodyFont: { family: "Inter", weight: "bold", size: 11 },
+                  titleColor: "#00FF7F",
+                  padding: 16,
+                  cornerRadius: 16,
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderWidth: 1,
+                  displayColors: false,
+                },
+              }
+            } as any} 
+          />
         </div>
       </div>
 
-      {/* Upcoming Tasks */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <h2 className="text-lg font-medium text-primary mb-4">
-          Upcoming Tasks
+      {/* Pending Tasks */}
+      <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-12 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl -mr-32 -mt-32 transition-all group-hover:bg-primary/10"></div>
+        <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-10">
+          Pending Tasks
         </h2>
-        <div className="space-y-3">
-          <div className="flex items-center p-3 bg-blue-50 rounded-md">
-            <div className="bg-blue-100 p-2 rounded-full mr-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-blue-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-                />
-              </svg>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+          {[
+            { label: "Review First Bank filing", time: "Deadline in 48h", status: "Critical", color: "accent-red", icon: "priority_high" },
+            { label: "Audit Zenith Bank records", time: "Scheduled for today", status: "Routine", color: "primary", icon: "visibility" },
+            { label: "Check monthly performance", time: "End of month", status: "Low", color: "white/20", icon: "bar_chart" },
+            { label: "Verify bank settlement", time: "Deadline in 12h", status: "High", color: "accent-gold", icon: "settings_input_component" },
+          ].map((task, i) => (
+            <div key={i} className="flex items-center p-8 bg-white/2 rounded-[2rem] border border-white/5 group hover:bg-white/5 transition-all">
+              <div className={`w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mr-8 group-hover:scale-110 transition-transform ${task.status === 'Critical' ? 'shadow-[0_0_20px_rgba(255,90,90,0.1)]' : ''}`}>
+                <div className={`w-2 h-2 rounded-full ${task.status === 'Critical' ? 'bg-accent-red animate-pulse' : (task.status === 'Routine' ? 'bg-primary' : (task.status === 'High' ? 'bg-accent-gold' : 'bg-white/20'))}`}></div>
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-black text-white uppercase tracking-widest mb-1 group-hover:text-primary-light transition-colors">
+                  {task.label}
+                </p>
+                <p className="text-[9px] font-black text-white/80 uppercase tracking-[0.2em]">{task.time}</p>
+              </div>
+              <span className={`text-[8px] font-black px-4 py-1 rounded-full uppercase tracking-widest border border-white/5 ${task.status === 'Critical' ? 'text-accent-red bg-accent-red/5 border-accent-red/10' : 'text-white/80'}`}>
+                {task.status}
+              </span>
             </div>
-            <div className="flex-1">
-              <p className="font-medium text-sm">
-                Review First Bank Declaration
-              </p>
-              <p className="text-xs text-gray-600">Due in 2 days</p>
-            </div>
-            <span className="text-xs px-2 py-1 bg-blue-200 text-blue-800 rounded-full">
-              High Priority
-            </span>
-          </div>
-
-          <div className="flex items-center p-3 bg-purple-50 rounded-md">
-            <div className="bg-purple-100 p-2 rounded-full mr-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-purple-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <p className="font-medium text-sm">
-                Audit Zenith Bank Transactions
-              </p>
-              <p className="text-xs text-gray-600">Due in 5 days</p>
-            </div>
-            <span className="text-xs px-2 py-1 bg-purple-200 text-purple-800 rounded-full">
-              Medium
-            </span>
-          </div>
-
-          <div className="flex items-center p-3 bg-green-50 rounded-md">
-            <div className="bg-green-100 p-2 rounded-full mr-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-green-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
-            </div>
-            <div className="flex-1">
-              <p className="font-medium text-sm">Prepare Monthly Report</p>
-              <p className="text-xs text-gray-600">Due in 1 week</p>
-            </div>
-            <span className="text-xs px-2 py-1 bg-green-200 text-green-800 rounded-full">
-              Low
-            </span>
-          </div>
+          ))}
         </div>
       </div>
     </div>

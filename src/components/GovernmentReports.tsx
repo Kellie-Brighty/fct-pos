@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Select } from "antd";
+import BoldModal from "./BoldModal";
 
 const GovernmentReports = () => {
   const [activeTab, setActiveTab] = useState<
@@ -10,6 +12,17 @@ const GovernmentReports = () => {
   const [exportFormat, setExportFormat] = useState<"pdf" | "excel" | "csv">(
     "excel"
   );
+
+  const [alertConfig, setAlertConfig] = useState({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info" as "info" | "success" | "warning" | "error",
+  });
+
+  const showAlert = (title: string, message: string, type: "info" | "success" | "warning" | "error" = "info") => {
+    setAlertConfig({ isOpen: true, title, message, type });
+  };
 
   // Mock data for transaction reports
   const transactionReports = [
@@ -222,484 +235,339 @@ const GovernmentReports = () => {
 
   const handleExportReport = () => {
     // In a real application, this would trigger an API call to generate and download the report
-    alert(
-      `Exporting ${activeTab} report in ${exportFormat.toUpperCase()} format`
+    showAlert(
+      "Extraction Initialized",
+      `The ${activeTab.toUpperCase()} repository is being compiled in ${exportFormat.toUpperCase()} format. You will be notified upon completion.`,
+      "success"
     );
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-primary">Reports</h1>
-        <div className="mt-4 md:mt-0">
-          <div className="flex flex-wrap gap-2">
-            <select
-              className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-              value={dateRange}
-              onChange={(e) => setDateRange(e.target.value as any)}
-            >
-              <option value="last7Days">Last 7 Days</option>
-              <option value="last30Days">Last 30 Days</option>
-              <option value="last90Days">Last 90 Days</option>
-              <option value="custom">Custom Range</option>
-            </select>
-
-            <div className="flex space-x-2">
-              <select
-                className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                value={exportFormat}
-                onChange={(e) => setExportFormat(e.target.value as any)}
-              >
-                <option value="excel">Excel</option>
-                <option value="pdf">PDF</option>
-                <option value="csv">CSV</option>
-              </select>
-
-              <button
-                onClick={handleExportReport}
-                className="bg-primary text-white px-4 py-2 rounded-md text-sm hover:bg-primary-dark transition flex items-center"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 mr-1"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                  />
-                </svg>
-                Export
-              </button>
-            </div>
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-10 group gap-8">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1">
+            INTELLIGENCE <span className="text-primary-light">ARCHIVE</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Historical Fiscal Manifest Repository
+            </p>
           </div>
+        </div>
+        
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center space-x-2 glass-card bg-white/2 border-white/5 p-1 rounded-2xl">
+            <Select
+              className="w-48 text-white min-h-[48px]"
+              popupClassName="ant-select-dropdown"
+              value={dateRange}
+              bordered={false}
+              onChange={(value) => setDateRange(value)}
+              options={[
+                { value: "last7Days", label: "Last 7 Cycles" },
+                { value: "last30Days", label: "Last 30 Cycles" },
+                { value: "last90Days", label: "Last 90 Cycles" },
+                { value: "custom", label: "Custom Range" },
+              ]}
+            />
+
+            <div className="w-px h-8 bg-white/10 mx-2"></div>
+
+            <Select
+              className="w-40 text-white min-h-[48px]"
+              popupClassName="ant-select-dropdown"
+              value={exportFormat}
+              bordered={false}
+              onChange={(value) => setExportFormat(value)}
+              options={[
+                { value: "excel", label: "Binary .XLSX" },
+                { value: "pdf", label: "Document .PDF" },
+                { value: "csv", label: "Data .CSV" },
+              ]}
+            />
+          </div>
+
+          <button
+            onClick={handleExportReport}
+            className="btn-primary px-10 py-4 text-[10px] tracking-widest uppercase font-black rounded-2xl h-[52px] flex items-center justify-center"
+          >
+            Extract Archive
+          </button>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-lg shadow-md">
-        <div className="border-b border-gray-200">
-          <nav className="flex -mb-px overflow-x-auto">
+      <div className="glass-card border-white/5 bg-white/2 rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <div className="flex border-b border-white/5 bg-white/2">
+          {[
+            { id: "transactions", label: "Transaction Logs" },
+            { id: "declarations", label: "Manifest Archive" },
+            { id: "payments", label: "Settlement Relay" },
+            { id: "summaries", label: "Fiscal Overviews" },
+          ].map((tab) => (
             <button
-              onClick={() => setActiveTab("transactions")}
-              className={`py-4 px-6 font-medium text-sm border-b-2 ${
-                activeTab === "transactions"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id as any)}
+              className={`flex-1 py-6 px-4 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 ${
+                activeTab === tab.id
+                  ? "text-primary border-b-2 border-primary bg-primary/5 shadow-[inset_0_-2px_0_0_rgba(0,109,53,1)]"
+                  : "text-white/80 hover:text-white/80 hover:bg-white/5"
               }`}
             >
-              Transaction Reports
+              {tab.label}
             </button>
-            <button
-              onClick={() => setActiveTab("declarations")}
-              className={`py-4 px-6 font-medium text-sm border-b-2 ${
-                activeTab === "declarations"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              Declaration Reports
-            </button>
-            <button
-              onClick={() => setActiveTab("payments")}
-              className={`py-4 px-6 font-medium text-sm border-b-2 ${
-                activeTab === "payments"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              Payment Reports
-            </button>
-            <button
-              onClick={() => setActiveTab("summaries")}
-              className={`py-4 px-6 font-medium text-sm border-b-2 ${
-                activeTab === "summaries"
-                  ? "border-primary text-primary"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              }`}
-            >
-              Summary Reports
-            </button>
-          </nav>
+          ))}
         </div>
 
-        <div className="p-6">
+        <div className="p-8 md:p-12">
           {/* Transaction Reports */}
           {activeTab === "transactions" && (
-            <div>
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-gray-700">
-                  Transaction Reports
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Detailed POS transaction data for tax collection tracking
-                </p>
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="mb-10 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <div>
+                  <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+                    Transaction Audit logs
+                  </h3>
+                  <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">
+                    Detailed POS Sequence Manifests
+                  </p>
+                </div>
+                <div className="flex items-center space-x-6">
+                  <div className="flex items-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary mr-3"></div>
+                    <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Live Flow</span>
+                  </div>
+                </div>
               </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Report ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Bank
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Total Transactions
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Tax Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {transactionReports.map((report) => (
-                      <tr key={report.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
-                          {report.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.bank}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.date}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.totalTxn}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.taxAmount}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-primary hover:text-primary-dark">
-                            View
-                          </button>
-                        </td>
+
+              <div className="glass-card border-white/5 bg-white/2 rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="min-w-full divide-y divide-white/5">
+                    <thead>
+                      <tr className="bg-white/2">
+                        {["Manifest ID", "Node Source", "Temporal", "Sequence Sum", "Revenue Asset", "Command"].map((h) => (
+                          <th key={h} className="px-8 py-5 text-left text-[10px] font-black text-white/80 uppercase tracking-widest">
+                            {h}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {transactionReports.map((report) => (
+                        <tr key={report.id} className="hover:bg-white/5 transition-all">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-primary-light uppercase tracking-widest">
+                            {report.id}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest leading-none">
+                            {report.bank}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.date}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tighter tabular-nums">
+                            {report.totalTxn}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tighter opacity-80 tabular-nums">
+                            {report.taxAmount}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap">
+                            <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all">
+                              Inspect logs
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
 
           {/* Declaration Reports */}
           {activeTab === "declarations" && (
-            <div>
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-gray-700">
-                  Declaration Reports
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="mb-10">
+                <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+                  Fiscal Manifest Archive
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Monthly bank tax declarations and reconciliation status
+                <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">
+                  Validated Institutional Declarations
                 </p>
               </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Declaration ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Bank
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Period
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Submission Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Status
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {declarationReports.map((report) => (
-                      <tr key={report.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
-                          {report.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.bank}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.period}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.submissionDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span
-                            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                            ${
-                              report.status === "Reconciled"
-                                ? "bg-green-100 text-green-800"
-                                : report.status === "Discrepancy"
-                                ? "bg-yellow-100 text-yellow-800"
-                                : "bg-blue-100 text-blue-800"
-                            }`}
-                          >
-                            {report.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.amount}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-primary hover:text-primary-dark">
-                            View
-                          </button>
-                        </td>
+
+              <div className="glass-card border-white/5 bg-white/2 rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="min-w-full divide-y divide-white/5">
+                    <thead>
+                      <tr className="bg-white/2">
+                        {["Archive ID", "Node", "Cycle", "Submittal", "Status", "Volume Sum", "Command"].map((h) => (
+                          <th key={h} className="px-8 py-5 text-left text-[10px] font-black text-white/80 uppercase tracking-widest">
+                            {h}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {declarationReports.map((report) => (
+                        <tr key={report.id} className="hover:bg-white/5 transition-all">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-primary-light uppercase tracking-widest">
+                            {report.id}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.bank}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.period}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.submissionDate}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap">
+                            <span
+                              className={`px-3 py-1 text-[8px] font-black tracking-widest uppercase rounded-full border shadow-[0_0_10px_rgba(0,0,0,0.2)] 
+                              ${
+                                report.status === "Reconciled"
+                                  ? "bg-primary/10 text-primary border-primary/20"
+                                  : report.status === "Discrepancy"
+                                  ? "bg-accent-red/10 text-accent-red border-accent-red/20"
+                                  : "bg-accent-gold/10 text-accent-gold border-accent-gold/20"
+                              }`}
+                            >
+                              {report.status}
+                            </span>
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tighter tabular-nums">
+                            {report.amount}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap">
+                            <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all">
+                              Decrypt Manifest
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
 
           {/* Payment Reports */}
           {activeTab === "payments" && (
-            <div>
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-gray-700">
-                  Payment Reports
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="mb-10">
+                <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+                  Settlement Relay Logs
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Tax payment records and receipts from banks
+                <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">
+                  Verified Inflow Transmission History
                 </p>
               </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Payment ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Bank
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Period
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Payment Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Amount
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Method
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {paymentReports.map((report) => (
-                      <tr key={report.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
-                          {report.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.bank}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.period}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.paymentDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.amount}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.method}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-primary hover:text-primary-dark mr-2">
-                            View
-                          </button>
-                          <button className="text-primary hover:text-primary-dark">
-                            Receipt
-                          </button>
-                        </td>
+
+              <div className="glass-card border-white/5 bg-white/2 rounded-3xl overflow-hidden">
+                <div className="overflow-x-auto custom-scrollbar">
+                  <table className="min-w-full divide-y divide-white/5">
+                    <thead>
+                      <tr className="bg-white/2">
+                        {["Relay ID", "Node Source", "Cycle", "Settlement", "Revenue", "Protocol", "Command"].map((h) => (
+                          <th key={h} className="px-8 py-5 text-left text-[10px] font-black text-white/80 uppercase tracking-widest">
+                            {h}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="divide-y divide-white/5">
+                      {paymentReports.map((report) => (
+                        <tr key={report.id} className="hover:bg-white/5 transition-all">
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-primary-light uppercase tracking-widest">
+                            {report.id}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.bank}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.period}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest">
+                            {report.paymentDate}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white uppercase tracking-tighter tabular-nums">
+                            {report.amount}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap text-xs font-black text-white/80 uppercase tracking-widest opacity-60">
+                            {report.method}
+                          </td>
+                          <td className="px-8 py-5 whitespace-nowrap">
+                            <div className="flex items-center space-x-4">
+                              <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all">
+                                Inspect
+                              </button>
+                              <button className="text-[10px] font-black text-primary-light hover:text-white uppercase tracking-widest transition-all">
+                                Manifest
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}
 
           {/* Summary Reports */}
           {activeTab === "summaries" && (
-            <div>
-              <div className="mb-4">
-                <h3 className="text-lg font-medium text-gray-700">
-                  Summary Reports
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="mb-10">
+                <h3 className="text-sm font-black text-white/80 uppercase tracking-[0.3em] mb-2">
+                  Fiscal Overviews
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Consolidated tax collection summaries by period
+                <p className="text-[10px] font-black text-white/80 uppercase tracking-widest">
+                  Consolidated Intelligence Summaries
                 </p>
               </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Report ID
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Title
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Period
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Generated Date
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        File Size
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {summaryReports.map((report) => (
-                      <tr key={report.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {summaryReports.map((report) => (
+                  <div key={report.id} className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 transition-all group flex flex-col justify-between rounded-[2rem] relative overflow-hidden">
+                    <div className="absolute -right-12 -top-12 w-48 h-48 bg-white/2 blur-[80px] rounded-full group-hover:bg-white/5 transition-all"></div>
+                    <div>
+                      <div className="flex justify-between items-start mb-6">
+                        <span className="text-[9px] font-black text-primary-light bg-primary/10 px-3 py-1 rounded-full uppercase tracking-widest border border-primary/20">
                           {report.id}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {report.title}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.period}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.generatedDate}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {report.fileSize}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <button className="text-primary hover:text-primary-dark mr-2">
-                            View
-                          </button>
-                          <button className="text-primary hover:text-primary-dark">
-                            Download
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                        </span>
+                        <span className="text-[10px] font-black text-white/80 uppercase tracking-[0.2em]">{report.fileSize}</span>
+                      </div>
+                      <h4 className="text-sm font-black text-white uppercase tracking-widest mb-2 group-hover:text-primary-light transition-colors">{report.title}</h4>
+                      <p className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-8">{report.period} Cycle</p>
+                    </div>
+                    <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                      <span className="text-[9px] font-black text-white/80 uppercase tracking-widest italic">{report.generatedDate}</span>
+                      <div className="flex space-x-4">
+                        <button className="text-[10px] font-black text-white/80 hover:text-white uppercase tracking-widest transition-all">Analyze</button>
+                        <button className="text-[10px] font-black text-primary-light hover:text-white uppercase tracking-widest transition-all">Download</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </div>
       </div>
+
+      <BoldModal
+        isOpen={alertConfig.isOpen}
+        onClose={() => setAlertConfig({ ...alertConfig, isOpen: false })}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </div>
   );
 };

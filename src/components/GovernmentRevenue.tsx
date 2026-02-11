@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Select } from "antd";
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -37,16 +38,16 @@ const GovernmentRevenue = () => {
       {
         label: "Tax Revenue (Millions NGN)",
         data: [35.8, 42.2, 38.9, 41.5, 47.3, 51.8, 56.2, 58.9, 62.1, 65.7, 68.2, 72.5],
-        borderColor: "#00A651",
-        backgroundColor: "rgba(0, 166, 81, 0.1)",
+        borderColor: "#006D35", // Primary
+        backgroundColor: "rgba(0, 109, 53, 0.1)",
         fill: true,
         tension: 0.4,
       },
       {
         label: "Target (Millions NGN)",
         data: [40, 40, 40, 45, 45, 45, 50, 50, 50, 55, 55, 55],
-        borderColor: "#FFA500",
-        backgroundColor: "rgba(255, 165, 0, 0.1)",
+        borderColor: "#F0B323", // Accent Gold
+        backgroundColor: "rgba(240, 179, 35, 0.1)",
         borderDash: [5, 5],
         fill: false,
       },
@@ -60,14 +61,14 @@ const GovernmentRevenue = () => {
       {
         data: [25, 18, 15, 13, 10, 19],
         backgroundColor: [
-          "#00A651", // Primary color
-          "#028A42",
-          "#046E34",
-          "#065326",
-          "#083D1D",
-          "#0A2714",
+          "#006D35", // Primary
+          "#004B23", // Primary Dark
+          "#00A651", // Primary Light
+          "#F0B323", // Accent Gold
+          "#0B1120", // Secondary
+          "#1A2235", // Secondary Light
         ],
-        borderColor: "white",
+        borderColor: "rgba(255, 255, 255, 0.1)",
         borderWidth: 2,
       },
     ],
@@ -91,274 +92,227 @@ const GovernmentRevenue = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-primary">Revenue Analytics</h1>
-        <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
-          <select
-            className="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-            value={bankFilter}
-            onChange={(e) => setBankFilter(e.target.value)}
-          >
-            <option value="all">All Banks</option>
-            <option value="firstBank">First Bank</option>
-            <option value="gtbank">GTBank</option>
-            <option value="uba">UBA</option>
-            <option value="accessBank">Access Bank</option>
-            <option value="zenithBank">Zenith Bank</option>
-          </select>
-          
-          <div className="bg-white rounded-lg shadow-sm inline-flex p-1 border border-gray-200">
-            <button
-              className={`px-3 py-1.5 text-xs rounded-md ${
-                dateRange === "lastMonth"
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-              onClick={() => handleDateRangeChange("lastMonth")}
-            >
-              1M
-            </button>
-            <button
-              className={`px-3 py-1.5 text-xs rounded-md ${
-                dateRange === "last3Months"
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-              onClick={() => handleDateRangeChange("last3Months")}
-            >
-              3M
-            </button>
-            <button
-              className={`px-3 py-1.5 text-xs rounded-md ${
-                dateRange === "last6Months"
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-              onClick={() => handleDateRangeChange("last6Months")}
-            >
-              6M
-            </button>
-            <button
-              className={`px-3 py-1.5 text-xs rounded-md ${
-                dateRange === "lastYear"
-                  ? "bg-primary text-white"
-                  : "text-gray-600 hover:bg-gray-100"
-              }`}
-              onClick={() => handleDateRangeChange("lastYear")}
-            >
-              1Y
-            </button>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 group">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1">
+            INFLOW <span className="text-primary-light">INTELLIGENCE</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Multi-Channel Revenue Calibration Protocol
+            </p>
+          </div>
+        </div>
+        
+        <div className="mt-8 md:mt-0 flex flex-wrap gap-4">
+          <div className="flex items-center space-x-2 glass-card bg-white/2 border-white/5 p-1 rounded-2xl">
+            <Select
+              className="w-48 text-white min-h-[48px]"
+              popupClassName="ant-select-dropdown"
+              value={bankFilter}
+              bordered={false}
+              onChange={(value) => setBankFilter(value)}
+              options={[
+                { value: "all", label: "All Channels" },
+                { value: "firstBank", label: "First Bank" },
+                { value: "gtbank", label: "GTBank" },
+              ]}
+            />
+
+            <div className="w-px h-8 bg-white/10 mx-2"></div>
+
+            <div className="flex p-1">
+              {[
+                { id: "lastMonth", label: "1M" },
+                { id: "last3Months", label: "3M" },
+                { id: "last6Months", label: "6M" },
+                { id: "lastYear", label: "1Y" },
+              ].map((r) => (
+                <button
+                  key={r.id}
+                  className={`px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-xl transition-all duration-500 ${
+                    dateRange === r.id
+                      ? "bg-primary text-white shadow-2xl shadow-primary/40 scale-105"
+                      : "text-white/80 hover:text-white/80"
+                  }`}
+                  onClick={() => handleDateRangeChange(r.id as any)}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Revenue Summary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <div className="text-sm text-gray-500 mb-1">Total Revenue (YTD)</div>
-          <div className="text-2xl font-bold text-primary">₦614.8M</div>
-          <div className="text-xs text-green-600 mt-1">+12.3% vs last year</div>
-        </div>
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <div className="text-sm text-gray-500 mb-1">Average Monthly</div>
-          <div className="text-2xl font-bold text-primary">₦51.2M</div>
-          <div className="text-xs text-green-600 mt-1">+8.7% vs target</div>
-        </div>
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <div className="text-sm text-gray-500 mb-1">Forecasted Year-End</div>
-          <div className="text-2xl font-bold text-primary">₦742.1M</div>
-          <div className="text-xs text-green-600 mt-1">+15.6% vs last year</div>
-        </div>
-        <div className="bg-white rounded-lg shadow-md p-4">
-          <div className="text-sm text-gray-500 mb-1">Overall Compliance</div>
-          <div className="text-2xl font-bold text-primary">87.4%</div>
-          <div className="text-xs text-green-600 mt-1">+2.8% vs last quarter</div>
-        </div>
+      {/* Revenue Summary Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {[
+          { label: "Total Revenue (YTD)", val: "₦614.8M", growth: "+12.3%", color: "primary" },
+          { label: "Average Monthly", val: "₦51.2M", growth: "+8.7%", color: "primary" },
+          { label: "Forecasted Year-End", val: "₦742.1M", growth: "+15.6%", color: "primary" },
+          { label: "Overall Compliance", val: "87.4%", growth: "+2.8%", color: "accent-gold" },
+        ].map((m) => (
+          <div key={m.label} className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 transition-all group rounded-[2.5rem] relative overflow-hidden">
+            <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/2 blur-2xl rounded-full group-hover:bg-white/5 transition-all"></div>
+            <div className="text-[10px] font-black text-white/80 uppercase tracking-[0.3em] mb-4">{m.label}</div>
+            <div className="text-3xl font-black text-white tracking-tighter tabular-nums mb-6">{m.val}</div>
+            <div className={`text-[9px] font-black flex items-center tracking-widest uppercase ${m.color === 'primary' ? 'text-primary' : 'text-accent-gold'}`}>
+              <svg className="w-3 h-3 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              {m.growth} PROTOCOL GAIN
+            </div>
+          </div>
+        ))}
       </div>
 
       {/* Revenue Trend Chart */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-medium text-gray-700 mb-4">Revenue Trend Analysis</h3>
-        <div className="h-80">
+      <div className="glass-card p-10 border-white/5 bg-white/2 rounded-[2.5rem] group relative overflow-hidden shadow-2xl">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 blur-[150px] rounded-full -mr-64 -mt-64 transition-all duration-1000 group-hover:bg-primary/10"></div>
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12 relative z-10 gap-6">
+          <div>
+            <h3 className="text-xl font-black text-white tracking-tighter mb-2">REVENUE STREAM ANALYSIS</h3>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.3em]">Temporal Inflow Calibration Protocol</p>
+          </div>
+          <div className="flex items-center space-x-8">
+            <div className="flex items-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary mr-3 shadow-[0_0_10px_rgba(0,109,53,1)]"></div>
+              <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Actual Revenue</span>
+            </div>
+            <div className="flex items-center">
+              <div className="w-1.5 h-1.5 rounded-full border border-white/20 mr-3 border-dashed"></div>
+              <span className="text-[9px] font-black text-white/80 uppercase tracking-widest">Benchmark</span>
+            </div>
+          </div>
+        </div>
+        <div className="h-96 bg-white/2 rounded-[2rem] border border-white/5 p-8 flex items-center justify-center relative overflow-hidden group/chart cursor-crosshair">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(0,109,53,0.05),transparent)] pointer-events-none transition-all duration-700 group-hover/chart:opacity-50"></div>
           <Line
             data={revenueData}
             options={{
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: {
-                  position: "top",
-                },
+                legend: { display: false },
                 tooltip: {
-                  mode: "index",
-                  intersect: false,
-                  callbacks: {
-                    label: function(context) {
-                      let label = context.dataset.label || "";
-                      if (label) {
-                        label += ": ";
-                      }
-                      if (context.parsed.y !== null) {
-                        label += "₦" + context.parsed.y + "M";
-                      }
-                      return label;
-                    }
-                  }
+                  backgroundColor: "rgba(11, 17, 32, 0.95)",
+                  titleFont: { family: "Inter", weight: "bold", size: 12 },
+                  bodyFont: { family: "Inter", weight: "bold", size: 11 },
+                  titleColor: "#00FF7F",
+                  padding: 16,
+                  cornerRadius: 16,
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                  borderWidth: 1,
+                  displayColors: false,
                 },
               },
               scales: {
                 y: {
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: "Millions (NGN)",
-                  },
-                  ticks: {
-                    callback: function(value) {
-                      return "₦" + value + "M";
-                    }
-                  }
+                  grid: { color: "rgba(255, 255, 255, 0.03)" },
+                  ticks: { color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "bold" } },
                 },
-              },
-              interaction: {
-                mode: "index",
-                intersect: false,
-              },
+                x: {
+                  grid: { display: false },
+                  ticks: { color: "rgba(255, 255, 255, 0.2)", font: { size: 9, weight: "bold" } },
+                }
+              }
             }}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Bank Distribution Chart */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-4">Revenue Distribution by Bank</h3>
-          <div className="h-64 flex items-center justify-center">
-            <div className="w-full max-w-xs">
-              <Doughnut
-                data={bankDistributionData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: "right",
-                    },
-                    tooltip: {
-                      callbacks: {
-                        label: function(context) {
-                          const label = context.label || "";
-                          const value = context.raw as number;
-                          const percentage = value + "%";
-                          return `${label}: ${percentage}`;
-                        }
-                      }
-                    }
-                  },
-                  cutout: "70%",
-                }}
-              />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Distribution */}
+        <div className="glass-card p-8">
+          <h3 className="text-lg font-bold text-white tracking-tight mb-8 text-glow">Channel Distribution</h3>
+          <div className="h-64 flex items-center justify-center relative">
+            <Doughnut
+              data={bankDistributionData}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { position: "right", labels: { color: "rgba(255, 255, 255, 0.6)", font: { size: 11, weight: "bold" }, usePointStyle: true, padding: 20 } },
+                },
+                cutout: "75%",
+              }}
+            />
+            <div className="absolute flex flex-col items-center justify-center">
+              <span className="text-[10px] font-bold text-white/30 uppercase tracking-widest">Dominant</span>
+              <span className="text-xl font-bold text-white">25%</span>
             </div>
           </div>
         </div>
 
         {/* Growth Analysis */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-4">Year-over-Year Growth</h3>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Q1 Growth</span>
-                <span className="text-sm font-medium text-gray-900">+14.2%</span>
+        <div className="glass-card p-8">
+          <h3 className="text-lg font-bold text-white tracking-tight mb-8">Quarterly Velocity</h3>
+          <div className="space-y-6">
+            {[
+              { label: "Q1 GROWTH", val: "14.2%", p: 14.2, color: "primary" },
+              { label: "Q2 GROWTH", val: "16.8%", p: 16.8, color: "primary" },
+              { label: "Q3 GROWTH", val: "11.5%", p: 11.5, color: "primary" },
+              { label: "Q4 PROJECTED", val: "18.3%", p: 18.3, color: "accent-gold" },
+            ].map((q) => (
+              <div key={q.label}>
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-[10px] font-bold text-white/80 uppercase tracking-widest">{q.label}</span>
+                  <span className="text-xs font-bold text-white tabular-nums">+{q.val}</span>
+                </div>
+                <div className="w-full bg-white/5 rounded-full h-1 overflow-hidden">
+                  <div 
+                    className={`h-full rounded-full shadow-[0_0_8px_rgba(0,109,53,0.5)] transition-all duration-1000 ${q.color === 'primary' ? 'bg-primary' : 'bg-accent-gold'}`} 
+                    style={{ width: `${q.p}%` }}
+                  ></div>
+                </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "14.2%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Q2 Growth</span>
-                <span className="text-sm font-medium text-gray-900">+16.8%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "16.8%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Q3 Growth</span>
-                <span className="text-sm font-medium text-gray-900">+11.5%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "11.5%" }}></div>
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Q4 Growth (Projected)</span>
-                <span className="text-sm font-medium text-gray-900">+18.3%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-green-500 h-2.5 rounded-full" style={{ width: "18.3%" }}></div>
-              </div>
-            </div>
-            <div className="pt-4 border-t border-gray-200">
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium text-gray-700">Annual Growth</span>
-                <span className="text-sm font-medium text-gray-900">+15.2%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: "15.2%" }}></div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Bank Performance Table */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-medium text-gray-700">Bank Performance</h3>
-          <button className="text-primary hover:text-primary-dark text-sm font-medium">
-            Export Data
+      <div className="glass-card overflow-hidden border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem]">
+        <div className="p-10 border-b border-white/5 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h3 className="text-xl font-black text-white tracking-tighter mb-2 uppercase">CHANNEL PERFORMANCE RELAY</h3>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.3em]">Institutional Compliance Architecture Audit</p>
+          </div>
+          <button className="btn-primary px-8 py-3 text-[10px] font-black tracking-widest uppercase">
+            Extract Audit
           </button>
         </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Bank
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total Revenue
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Compliance Rate
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
-                </th>
+        <div className="overflow-x-auto custom-scrollbar">
+          <table className="min-w-full divide-y divide-white/5">
+            <thead>
+              <tr className="bg-white/2">
+                {["Channel Node", "Total Transmission", "Integrity Rate", "Current Status"].map((h) => (
+                  <th key={h} className="px-10 py-6 text-left text-[10px] font-black text-white/80 uppercase tracking-[0.3em] whitespace-nowrap">
+                    {h}
+                  </th>
+                ))}
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/5">
               {bankPerformanceData.map((bank, index) => (
-                <tr key={index}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">{bank.bank}</div>
+                <tr key={index} className="hover:bg-white/5 transition-all group">
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <div className="text-xs font-black text-white/80 group-hover:text-white transition-colors uppercase tracking-widest">{bank.bank}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{bank.amount}</div>
+                  <td className="px-10 py-6 whitespace-nowrap tabular-nums">
+                    <div className="text-xs font-black text-white opacity-80 uppercase tracking-tighter group-hover:text-primary-light transition-colors">{bank.amount}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{bank.compliance}</div>
+                  <td className="px-10 py-6 whitespace-nowrap tabular-nums">
+                    <div className="text-xs font-black text-white/80 uppercase tracking-widest">{bank.compliance}</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                      ${bank.status === 'Compliant' ? 'bg-green-100 text-green-800' : 
-                        bank.status === 'Attention' ? 'bg-yellow-100 text-yellow-800' : 
-                        'bg-red-100 text-red-800'}`}
+                  <td className="px-10 py-6 whitespace-nowrap">
+                    <span className={`px-4 py-1 text-[8px] font-black tracking-widest uppercase rounded-full border shadow-[0_0_15px_rgba(0,0,0,0.1)] 
+                      ${bank.status === 'Compliant' ? 'bg-primary/10 text-primary border-primary/20' : 
+                        bank.status === 'Attention' ? 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' : 
+                        'bg-accent-red/10 text-accent-red border-accent-red/20'}`}
                     >
                       {bank.status}
                     </span>

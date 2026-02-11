@@ -1,4 +1,5 @@
 import { useState } from "react";
+import BoldModal from "./BoldModal";
 
 const GovernmentSettings = () => {
   const [activeTab, setActiveTab] = useState<
@@ -33,6 +34,22 @@ const GovernmentSettings = () => {
   });
 
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  
+  const [alertConfig, setAlertConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: "info" | "success" | "warning" | "error";
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info",
+  });
+
+  const showAlert = (title: string, message: string, type: "info" | "success" | "warning" | "error" = "info") => {
+    setAlertConfig({ isOpen: true, title, message, type });
+  };
 
   const handleProfileChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -64,183 +81,135 @@ const GovernmentSettings = () => {
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would send data to an API
-    alert("Profile saved successfully!");
+    showAlert("Profile Updated", "Your administrative identity profile has been successfully synchronized with the core system.", "success");
   };
 
   const handleSaveNotifications = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, this would send data to an API
-    alert("Notification preferences saved successfully!");
+    showAlert("Preferences Saved", "Your transmission channel and intelligence directive preferences have been updated.", "success");
   };
 
   const handleSaveSecurity = (e: React.FormEvent) => {
     e.preventDefault();
     // Validation for password change
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-      alert("New passwords do not match!");
+      showAlert("Verification Error", "The provided ciphers do not match. Please re-verify your new credential.", "error");
       return;
     }
     if (passwordForm.newPassword && passwordForm.newPassword.length < 8) {
-      alert("Password must be at least 8 characters!");
+      showAlert("Security Threshold", "Your new cipher must meet the minimum complexity requirement of 8 characters.", "warning");
       return;
     }
     // In a real app, this would send data to an API
-    alert("Security settings saved successfully!");
+    showAlert("Security Hardened", "Your access credentials have been successfully rotated and encrypted.", "success");
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-primary">Settings</h1>
+    <div className="space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 group">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-black text-white tracking-tighter mb-2 pl-1">
+            CORE <span className="text-primary-light">CONFIGURATION</span>
+          </h1>
+          <div className="flex items-center space-x-4">
+            <span className="w-12 h-px bg-primary/40"></span>
+            <p className="text-[10px] text-white/80 font-black uppercase tracking-[0.4em]">
+              Security & Access Management Protocol
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="flex border-b border-gray-200">
-          <button
-            className={`px-6 py-4 text-sm font-medium ${
-              activeTab === "profile"
-                ? "text-primary border-b-2 border-primary"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => setActiveTab("profile")}
-          >
-            Profile
-          </button>
-          <button
-            className={`px-6 py-4 text-sm font-medium ${
-              activeTab === "notifications"
-                ? "text-primary border-b-2 border-primary"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => setActiveTab("notifications")}
-          >
-            Notifications
-          </button>
-          <button
-            className={`px-6 py-4 text-sm font-medium ${
-              activeTab === "security"
-                ? "text-primary border-b-2 border-primary"
-                : "text-gray-500 hover:text-gray-700"
-            }`}
-            onClick={() => setActiveTab("security")}
-          >
-            Security
-          </button>
+      <div className="glass-card border-white/5 bg-white/2 rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <div className="flex border-b border-white/5 bg-white/2">
+          {[
+            { id: "profile", label: "Identity Profile", icon: "👤" },
+            { id: "notifications", label: "Latency Feed", icon: "🔔" },
+            { id: "security", label: "Security Protocol", icon: "🛡️" },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              className={`flex-1 px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 flex items-center justify-center ${
+                activeTab === tab.id
+                  ? "text-primary border-b-2 border-primary bg-primary/5 shadow-[inset_0_-2px_0_0_rgba(0,109,53,1)]"
+                  : "text-white/80 hover:text-white/80 hover:bg-white/5"
+              }`}
+              onClick={() => setActiveTab(tab.id as any)}
+            >
+              <span className="mr-3 opacity-40 group-hover:opacity-100 transition-opacity">
+                {tab.icon}
+              </span>
+              {tab.label}
+            </button>
+          ))}
         </div>
 
-        <div className="p-6">
+        <div className="p-10">
           {/* Profile Settings */}
           {activeTab === "profile" && (
-            <form onSubmit={handleSaveProfile}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label
-                    htmlFor="fullName"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={profileForm.fullName}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={profileForm.email}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Phone
-                  </label>
-                  <input
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    value={profileForm.phone}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="position"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Position
-                  </label>
-                  <input
-                    type="text"
-                    id="position"
-                    name="position"
-                    value={profileForm.position}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="department"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Department
-                  </label>
-                  <input
-                    type="text"
-                    id="department"
-                    name="department"
-                    value={profileForm.department}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="office"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Office
-                  </label>
-                  <input
-                    type="text"
-                    id="office"
-                    name="office"
-                    value={profileForm.office}
-                    onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                </div>
+            <form
+              onSubmit={handleSaveProfile}
+              className="animate-in slide-in-from-bottom-4 duration-500"
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {[
+                  {
+                    id: "fullName",
+                    label: "Full Name",
+                    val: profileForm.fullName,
+                  },
+                  {
+                    id: "email",
+                    label: "Official Email",
+                    val: profileForm.email,
+                    type: "email",
+                  },
+                  {
+                    id: "phone",
+                    label: "Secure Contact",
+                    val: profileForm.phone,
+                  },
+                  {
+                    id: "position",
+                    label: "Clearance Level",
+                    val: profileForm.position,
+                  },
+                  {
+                    id: "department",
+                    label: "Agency Division",
+                    val: profileForm.department,
+                  },
+                  {
+                    id: "office",
+                    label: "Physical Station",
+                    val: profileForm.office,
+                  },
+                ].map((field) => (
+                  <div key={field.id}>
+                    <label
+                      htmlFor={field.id}
+                      className="block text-[10px] font-bold text-white/80 uppercase tracking-widest mb-2 ml-1"
+                    >
+                      {field.label}
+                    </label>
+                    <input
+                      type={field.type || "text"}
+                      id={field.id}
+                      name={field.id}
+                      value={field.val}
+                      onChange={handleProfileChange}
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    />
+                  </div>
+                ))}
 
                 <div className="md:col-span-2">
                   <label
                     htmlFor="bio"
-                    className="block text-sm font-medium text-gray-700 mb-1"
+                    className="block text-[10px] font-bold text-white/80 uppercase tracking-widest mb-2 ml-1"
                   >
-                    Bio
+                    Operational Brief
                   </label>
                   <textarea
                     id="bio"
@@ -248,17 +217,17 @@ const GovernmentSettings = () => {
                     rows={4}
                     value={profileForm.bio}
                     onChange={handleProfileChange}
-                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all resize-none"
                   ></textarea>
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-end">
+              <div className="mt-12 flex justify-end">
                 <button
                   type="submit"
-                  className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition"
+                  className="btn-primary px-10 py-4 text-[10px] font-black uppercase tracking-widest shadow-2xl"
                 >
-                  Save Profile
+                  Synchronize Profile
                 </button>
               </div>
             </form>
@@ -266,188 +235,125 @@ const GovernmentSettings = () => {
 
           {/* Notification Settings */}
           {activeTab === "notifications" && (
-            <form onSubmit={handleSaveNotifications}>
-              <div className="space-y-4">
-                <h3 className="text-lg font-medium text-gray-900 mb-3">
-                  Notification Channels
+            <form
+              onSubmit={handleSaveNotifications}
+              className="animate-in slide-in-from-bottom-4 duration-500 space-y-10"
+            >
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] mb-6 flex items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary mr-3"></span>
+                  Transmission Channels
                 </h3>
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Email Notifications
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Receive notifications via email
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.email}
-                      onChange={() => handleNotificationToggle("email")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      SMS Notifications
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Receive notifications via SMS
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.sms}
-                      onChange={() => handleNotificationToggle("sms")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Browser Notifications
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Receive notifications in your browser
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.browser}
-                      onChange={() => handleNotificationToggle("browser")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <h3 className="text-lg font-medium text-gray-900 mt-6 mb-3">
-                  Notification Types
-                </h3>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Bank Declarations
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Notifications about new bank declarations
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.bankDeclarations}
-                      onChange={() =>
-                        handleNotificationToggle("bankDeclarations")
-                      }
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Bank Payments
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Notifications about bank payments
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.bankPayments}
-                      onChange={() => handleNotificationToggle("bankPayments")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      System Alerts
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Important system notifications
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.systemAlerts}
-                      onChange={() => handleNotificationToggle("systemAlerts")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Compliance Issues
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Notifications about compliance issues
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.complianceIssues}
-                      onChange={() =>
-                        handleNotificationToggle("complianceIssues")
-                      }
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
-                </div>
-
-                <div className="flex items-center justify-between py-2 border-b border-gray-200">
-                  <div>
-                    <h4 className="text-sm font-medium text-gray-900">
-                      Monthly Reports
-                    </h4>
-                    <p className="text-xs text-gray-500">
-                      Notifications about monthly report generation
-                    </p>
-                  </div>
-                  <label className="relative inline-flex items-center cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="sr-only peer"
-                      checked={notificationsEnabled.monthlyReports}
-                      onChange={() =>
-                        handleNotificationToggle("monthlyReports")
-                      }
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                  </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      id: "email",
+                      label: "Email Relay",
+                      sub: "Priority alerts to inbox",
+                    },
+                    {
+                      id: "sms",
+                      label: "SMS Burst",
+                      sub: "Critical status updates",
+                    },
+                    {
+                      id: "browser",
+                      label: "Direct Feed",
+                      sub: "Live desktop notifications",
+                    },
+                  ].map((ch) => (
+                    <div
+                      key={ch.id}
+                      className="glass-card p-6 border-white/5 hover:border-white/10 transition-all group"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-white uppercase tracking-wider">
+                          {ch.label}
+                        </span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            checked={(notificationsEnabled as any)[ch.id]}
+                            onChange={() =>
+                              handleNotificationToggle(ch.id as any)
+                            }
+                          />
+                          <div className="w-10 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/40 after:border-transparent after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary peer-checked:after:bg-white"></div>
+                        </label>
+                      </div>
+                      <p className="text-[10px] font-bold text-white/30 uppercase leading-relaxed">
+                        {ch.sub}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
-              <div className="mt-6 flex justify-end">
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition"
-                >
-                  Save Notification Settings
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] mb-6 flex items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-gold mr-3"></span>
+                  Intelligent Directives
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    {
+                      id: "bankDeclarations",
+                      label: "Agency Declarations",
+                      desc: "Automated logs for all participating bank nodes",
+                    },
+                    {
+                      id: "bankPayments",
+                      label: "Settlement Confirmations",
+                      desc: "Finalized revenue transfer acknowledgments",
+                    },
+                    {
+                      id: "systemAlerts",
+                      label: "Core System Pulse",
+                      desc: "Critical platform health and latency reports",
+                    },
+                    {
+                      id: "complianceIssues",
+                      label: "Regulatory Deviations",
+                      desc: "Real-time alerts for bank compliance breaches",
+                    },
+                    {
+                      id: "monthlyReports",
+                      label: "Intelligence Summaries",
+                      desc: "Comprehensive fiscal period performance logs",
+                    },
+                  ].map((type) => (
+                    <div
+                      key={type.id}
+                      className="flex items-center justify-between p-5 bg-white/2 rounded-2xl border border-white/5 hover:bg-white/5 transition-all group"
+                    >
+                      <div>
+                        <h4 className="text-xs font-bold text-white/80 uppercase group-hover:text-white transition-colors">
+                          {type.label}
+                        </h4>
+                        <p className="text-[10px] font-bold text-white/80 uppercase mt-1">
+                          {type.desc}
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={(notificationsEnabled as any)[type.id]}
+                          onChange={() =>
+                            handleNotificationToggle(type.id as any)
+                          }
+                        />
+                        <div className="w-10 h-5 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white/40 after:border-transparent after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary-high peer-checked:after:bg-white"></div>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-10 flex justify-end">
+                <button type="submit" className="btn-primary">
+                  Confirm Directives
                 </button>
               </div>
             </form>
@@ -455,144 +361,185 @@ const GovernmentSettings = () => {
 
           {/* Security Settings */}
           {activeTab === "security" && (
-            <form onSubmit={handleSaveSecurity}>
-              <div className="space-y-6">
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900 mb-4">
-                    Change Password
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
+            <form
+              onSubmit={handleSaveSecurity}
+              className="animate-in slide-in-from-bottom-4 duration-500 space-y-8"
+            >
+              <div className="glass-card p-8 border-white/5 group">
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] mb-8 flex items-center">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-red mr-3 shadow-[0_0_8px_rgba(255,90,90,0.5)]"></span>
+                  Access Credential Rotation
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {[
+                    {
+                      id: "currentPassword",
+                      label: "Active Cipher",
+                      type: "password",
+                      val: passwordForm.currentPassword,
+                    },
+                    {
+                      id: "newPassword",
+                      label: "New Cipher",
+                      type: "password",
+                      val: passwordForm.newPassword,
+                    },
+                    {
+                      id: "confirmPassword",
+                      label: "Re-verify Cipher",
+                      type: "password",
+                      val: passwordForm.confirmPassword,
+                    },
+                  ].map((field) => (
+                    <div key={field.id}>
                       <label
-                        htmlFor="currentPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
+                        htmlFor={field.id}
+                        className="block text-[10px] font-bold text-white/80 uppercase tracking-widest mb-2"
                       >
-                        Current Password
+                        {field.label}
                       </label>
                       <input
-                        type="password"
-                        id="currentPassword"
-                        name="currentPassword"
-                        value={passwordForm.currentPassword}
+                        type={field.type}
+                        id={field.id}
+                        name={field.id}
+                        value={field.val}
                         onChange={handlePasswordChange}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
+                        className="w-full bg-white/2 border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all font-mono"
+                        placeholder="••••••••"
                       />
                     </div>
-                    <div>
-                      <label
-                        htmlFor="newPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="newPassword"
-                        name="newPassword"
-                        value={passwordForm.newPassword}
-                        onChange={handlePasswordChange}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label
-                        htmlFor="confirmPassword"
-                        className="block text-sm font-medium text-gray-700 mb-1"
-                      >
-                        Confirm New Password
-                      </label>
-                      <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={passwordForm.confirmPassword}
-                        onChange={handlePasswordChange}
-                        className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
+                  ))}
                 </div>
+              </div>
 
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                  <div className="flex items-center justify-between">
+              <div className="glass-card p-8 border-primary/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-6">
+                    <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center border border-primary/20">
+                      <svg
+                        className="w-6 h-6 text-primary"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                        />
+                      </svg>
+                    </div>
                     <div>
-                      <h3 className="text-lg font-medium text-gray-900">
+                      <h3 className="text-sm font-bold text-white uppercase tracking-widest">
                         Two-Factor Authentication
                       </h3>
-                      <p className="text-sm text-gray-500 mt-1">
-                        Add an extra layer of security to your account
+                      <p className="text-[10px] font-bold text-white/30 uppercase mt-1">
+                        Multi-Stage Authorization Protocol
                       </p>
                     </div>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={twoFactorEnabled}
-                        onChange={() => setTwoFactorEnabled(!twoFactorEnabled)}
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                    </label>
                   </div>
-                  {twoFactorEnabled && (
-                    <div className="mt-4 p-4 bg-blue-50 rounded-md">
-                      <p className="text-sm text-blue-800">
-                        Two-Factor Authentication is enabled. You will receive a
-                        verification code via SMS when signing in.
-                      </p>
-                    </div>
-                  )}
+                  <label className="relative inline-flex items-center cursor-pointer scale-110">
+                    <input
+                      type="checkbox"
+                      className="sr-only peer"
+                      checked={twoFactorEnabled}
+                      onChange={() => setTwoFactorEnabled(!twoFactorEnabled)}
+                    />
+                    <div className="w-12 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[3px] after:bg-white/40 after:border-transparent after:rounded-full after:h-4.5 after:w-4.5 after:transition-all peer-checked:bg-primary-high peer-checked:after:bg-white"></div>
+                  </label>
                 </div>
+                {twoFactorEnabled && (
+                  <div className="mt-6 p-4 bg-primary/5 border border-primary/10 rounded-2xl animate-in zoom-in-95 duration-300">
+                    <p className="text-[10px] font-bold text-primary-high uppercase tracking-widest flex items-center">
+                      <svg
+                        className="w-4 h-4 mr-2"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      Protocol Online: SMS Gateway Configured
+                    </p>
+                  </div>
+                )}
+              </div>
 
-                <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
-                    Login Sessions
-                  </h3>
-                  <p className="text-sm text-gray-500 mb-4">
-                    These are devices that have logged into your account.
-                  </p>
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center p-3 bg-white rounded-md border border-gray-200">
-                      <div>
-                        <div className="text-sm font-medium">
-                          Chrome on Windows
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Abuja, Nigeria · Current session
+              <div className="glass-card p-8 border-white/5">
+                <h3 className="text-sm font-bold text-white uppercase tracking-[0.2em] mb-8">
+                  Active Sessions Relay
+                </h3>
+                <div className="space-y-4">
+                  {[
+                    {
+                      device: "Chrome / Windows 11",
+                      loc: "Abuja HQ",
+                      status: "STATION 01",
+                      current: true,
+                    },
+                    {
+                      device: "Mobile App / iOS",
+                      loc: "Maitama District",
+                      status: "STATION 04",
+                      current: false,
+                    },
+                  ].map((session, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-4 bg-white/2 rounded-2xl border border-white/5 group hover:bg-white/5 transition-all"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className={`w-2 h-2 rounded-full ${
+                            session.current
+                              ? "bg-primary shadow-[0_0_8px_rgba(0,109,53,1)]"
+                              : "bg-white/10"
+                          }`}
+                        ></div>
+                        <div>
+                          <p className="text-xs font-bold text-white/80 group-hover:text-white transition-colors">
+                            {session.device}
+                          </p>
+                          <p className="text-[9px] font-bold text-white/80 uppercase tracking-widest mt-0.5">
+                            {session.loc} • {session.status}
+                          </p>
                         </div>
                       </div>
-                      <span className="text-xs bg-green-100 text-green-800 py-1 px-2 rounded-full">
-                        Active
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center p-3 bg-white rounded-md border border-gray-200">
-                      <div>
-                        <div className="text-sm font-medium">
-                          Safari on iPhone
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          Abuja, Nigeria · Last active 2 days ago
-                        </div>
-                      </div>
-                      <button className="text-xs text-red-600 hover:text-red-800">
-                        Log out
+                      <button
+                        className={`text-[10px] font-black tracking-widest uppercase ${
+                          session.current
+                            ? "text-primary/40 cursor-default"
+                            : "text-accent-red hover:underline"
+                        }`}
+                      >
+                        {session.current ? "CURRENT" : "TERMINATE"}
                       </button>
                     </div>
-                  </div>
+                  ))}
                 </div>
               </div>
 
               <div className="mt-6 flex justify-end">
-                <button
-                  type="submit"
-                  className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition"
-                >
-                  Save Security Settings
+                <button type="submit" className="btn-primary">
+                  Update Security Profile
                 </button>
               </div>
             </form>
           )}
         </div>
       </div>
+
+      <BoldModal
+        isOpen={alertConfig.isOpen}
+        onClose={() => setAlertConfig({ ...alertConfig, isOpen: false })}
+        title={alertConfig.title}
+        message={alertConfig.message}
+        type={alertConfig.type}
+      />
     </div>
   );
 };
