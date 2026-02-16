@@ -41,11 +41,11 @@ const GeospatialIntel = () => {
   });
 
   const territorialData = [
-    { region: "Lagos Metro", activeUsers: "160,000", tgv: "₦1.4 Billion", penetration: "12.5%", color: "text-primary-light" },
-    { region: "Ogun Industrial", activeUsers: "140,000", tgv: "₦1.23 Billion", penetration: "9.8%", color: "text-orange-500" },
-    { region: "Rivers Port", activeUsers: "125,000", tgv: "₦1.1 Billion", penetration: "11.2%", color: "text-primary-light" },
-    { region: "Kano Commercial", activeUsers: "110,000", tgv: "₦975 Million", penetration: "10.5%", color: "text-primary-light" },
-    { region: "Oyo Central", activeUsers: "90,000", tgv: "₦800 Million", penetration: "7.5%", color: "text-orange-500" },
+    { region: "Lagos Metro", activeUsers: "160,000", ttv: "₦1.4 Billion", penetration: "12.5%", color: "text-primary-light" },
+    { region: "Ogun Industrial", activeUsers: "140,000", ttv: "₦1.23 Billion", penetration: "9.8%", color: "text-orange-500" },
+    { region: "Rivers Port", activeUsers: "125,000", ttv: "₦1.1 Billion", penetration: "11.2%", color: "text-primary-light" },
+    { region: "Kano Commercial", activeUsers: "110,000", ttv: "₦975 Million", penetration: "10.5%", color: "text-primary-light" },
+    { region: "Oyo Central", activeUsers: "90,000", ttv: "₦800 Million", penetration: "7.5%", color: "text-orange-500" },
   ];
 
   const buyingPowerData = [
@@ -238,7 +238,7 @@ const GeospatialIntel = () => {
                   {activeTab === "territorial" ? (
                     <>
                       <th className="px-10 py-6 text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Active Users</th>
-                      <th className="px-10 py-6 text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">TGV</th>
+                      <th className="px-10 py-6 text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">TTV</th>
                       <th className="px-10 py-6 text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">Market Penetration</th>
                     </>
                   ) : (
@@ -274,7 +274,7 @@ const GeospatialIntel = () => {
                           </div>
                         </td>
                         <td className="px-10 py-6">
-                          <span className="text-xs font-black text-primary-light uppercase">₦{row.tgv}</span>
+                          <span className="text-xs font-black text-primary-light uppercase">₦{row.ttv}</span>
                         </td>
                         <td className="px-10 py-6">
                           <div className="flex items-center justify-between">
