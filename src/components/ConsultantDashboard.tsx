@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import POSLiveFeed from "./POSLiveFeed";
 
 // Register ChartJS components
 ChartJS.register(
@@ -185,8 +186,8 @@ const ConsultantDashboard = () => {
         {[
           { label: "Assigned Banks", val: "12", gain: "+2 New", color: "primary" },
           { label: "Pending Reviews", val: "08", gain: "3 Urgent", color: "accent-red" },
+          { label: "Total Transaction Volume", val: "₦2.4 Billion", gain: "+15.2% vs last month", color: "primary" },
           { label: "Total Revenue", val: "₦158.3M", gain: "+12.4% vs last month", color: "primary" },
-          { label: "Compliance Rate", val: "92%", gain: "+3% Improvement", color: "primary" },
         ].map((m) => (
           <div key={m.label} className="glass-card p-8 border-white/5 bg-white/2 hover:border-white/10 transition-all group rounded-[2.5rem] relative overflow-hidden">
             <div className="absolute -right-8 -top-8 w-24 h-24 bg-white/2 blur-2xl rounded-full group-hover:bg-white/5 transition-all"></div>
@@ -202,8 +203,14 @@ const ConsultantDashboard = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Priority Reviews */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {/* Live POS Feed */}
+        <div className="lg:col-span-1 xl:col-span-1 h-full">
+          <POSLiveFeed />
+        </div>
+
+        <div className="lg:col-span-2 xl:col-span-3 space-y-8">
+          {/* Priority Reviews */}
         <div className="lg:col-span-2 glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] overflow-hidden">
           <div className="p-10 border-b border-white/5 flex justify-between items-center">
             <h2 className="text-sm font-black text-white/80 uppercase tracking-[0.3em]">
@@ -285,8 +292,9 @@ const ConsultantDashboard = () => {
           </div>
         </div>
       </div>
+    </div>
 
-      {/* Client Compliance Matrix */}
+    {/* Client Compliance Matrix */}
       <div className="glass-card border-white/5 bg-white/2 shadow-2xl rounded-[2.5rem] p-12">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
           <div>
